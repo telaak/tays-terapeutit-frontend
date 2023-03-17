@@ -130,7 +130,10 @@ export default function Table() {
             if (diff.length) {
               console.log(diff);
             }
-            window.location.href = `mailto:?bcc=${filteredEmails.join(",")}`;
+            let mail = document.createElement("a");
+            mail.href = `mailto:?bcc=${filteredEmails.join(",")}`;
+            mail.target= '_blank'
+            mail.click();
           };
           return (
             <Button
