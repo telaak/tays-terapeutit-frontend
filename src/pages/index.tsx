@@ -113,6 +113,18 @@ export default function Table() {
         enableRowSelection
         enableGrouping={true}
         enableColumnFilterModes
+        initialState={{
+          isFullScreen: true,
+          pagination: {
+            pageIndex: 0,
+            pageSize: 150
+          }
+        }}
+        muiTablePaginationProps={{
+          rowsPerPageOptions: [10, 25, 50, 100, 150],
+          showFirstButton: false,
+          showLastButton: false,
+        }}
         renderTopToolbarCustomActions={({ table }) => {
           const sendEmail = () => {
             const emails = table.getSelectedRowModel().flatRows.map((row) => {
