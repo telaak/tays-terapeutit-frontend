@@ -89,12 +89,12 @@ export default function Table() {
       },
       {
         accessorKey: "Paikkakunta",
-        header: "Paikkakunta",
+        header: "Paikka",
         size: 60,
       },
       {
         accessorKey: "Kohderyhmä",
-        header: "Kohderyhmä",
+        header: "Kohde",
         size: 50,
       },
     ],
@@ -111,7 +111,6 @@ export default function Table() {
         columns={columns}
         data={therapists.data}
         enableRowSelection
-        positionExpandColumn={"last"}
         enableGrouping={true}
         enableColumnFilterModes
         renderTopToolbarCustomActions={({ table }) => {
