@@ -1,8 +1,13 @@
 import { Button, Grid, List, ListItem, ListItemText } from "@mui/material";
 import axios from "axios";
-import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
+import MaterialReactTable, {
+  MRT_ColumnDef,
+  MRT_TableInstance,
+} from "material-react-table";
 import Head from "next/head";
 import { useMemo } from "react";
+import EmailIcon from "@mui/icons-material/Email";
+import SendIcon from "@mui/icons-material/Send";
 
 type Terapeutti = {
   Etunimi: string;
@@ -44,6 +49,25 @@ export async function getStaticProps() {
     },
   };
 }
+
+const parseEmails = (table: MRT_TableInstance<Terapeutti>) => {
+  const emails = table.getSelectedRowModel().flatRows.map((row) => {
+    const therapist = row.original as Terapeutti;
+    const parsedEmail = therapist.Sähköposti.replace(
+      "etunimi",
+      therapist.Etunimi
+    )
+      .replace("sukunimi", therapist.Sukunimi)
+      .replace("(at)", "@");
+    return parsedEmail;
+  });
+  const filteredEmails = emails.filter((e) => emailRegex.test(e));
+  const diff = emails.filter((e) => !filteredEmails.includes(e));
+  if (diff.length) {
+    console.log(diff);
+  }
+  return filteredEmails;
+};
 
 export default function Table({ therapists }: { therapists: Terapeutti[] }) {
   const columns = useMemo<MRT_ColumnDef<Terapeutti>[]>(
@@ -91,8 +115,9 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         enableRowSelection
         enableGrouping={true}
         enableColumnFilterModes
+        enableStickyHeader={true}
+        enableFullScreenToggle={false}
         initialState={{
-          isFullScreen: true,
           pagination: {
             pageIndex: 0,
             pageSize: 150,
@@ -105,35 +130,37 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         }}
         renderTopToolbarCustomActions={({ table }) => {
           const sendEmail = () => {
-            const emails = table.getSelectedRowModel().flatRows.map((row) => {
-              const therapist = row.original;
-              const parsedEmail = therapist.Sähköposti.replace(
-                "etunimi",
-                therapist.Etunimi
-              )
-                .replace("sukunimi", therapist.Sukunimi)
-                .replace("(at)", "@");
-              return parsedEmail;
-            });
-            const filteredEmails = emails.filter((e) => emailRegex.test(e));
-            const diff = emails.filter((e) => !filteredEmails.includes(e));
-            if (diff.length) {
-              console.log(diff);
-            }
+            const filteredEmails = parseEmails(table);
             let mail = document.createElement("a");
             mail.href = `mailto:?bcc=${filteredEmails.join(",")}`;
             mail.target = "_blank";
             mail.click();
           };
+          const copyEmails = () => {
+            const filteredEmails = parseEmails(table);
+            navigator.clipboard.writeText(filteredEmails.join(","));
+          };
           return (
-            <Button
-              disabled={!table.getIsSomeRowsSelected()}
-              color="primary"
-              onClick={sendEmail}
-              variant="contained"
-            >
-              Lähetä sähköposti
-            </Button>
+            <div style={{ display: "flex", gap: "0.5rem" }}>
+              <Button
+                disabled={!table.getIsSomeRowsSelected()}
+                color="primary"
+                onClick={sendEmail}
+                variant="contained"
+                startIcon={<SendIcon />}
+              >
+                Lähetä
+              </Button>
+              <Button
+                disabled={!table.getIsSomeRowsSelected()}
+                color="primary"
+                onClick={copyEmails}
+                variant="contained"
+                startIcon={<EmailIcon />}
+              >
+                Kopioi
+              </Button>
+            </div>
           );
         }}
         renderDetailPanel={({ row }) => {
