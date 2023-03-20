@@ -15,7 +15,6 @@ import MaterialReactTable, {
 import Head from "next/head";
 import { useMemo } from "react";
 import EmailIcon from "@mui/icons-material/Email";
-import SendIcon from "@mui/icons-material/Send";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { MRT_Localization_FI } from "@/fi-i18";
 
@@ -176,7 +175,10 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <MaterialReactTable
-        muiTableContainerProps={{ sx: { height: "calc(100vh - 56px)" } }}
+        muiTableContainerProps={{ className: "table-container" }}
+        muiSearchTextFieldProps={{sx: {
+          width: '10em'
+        }}}
         columns={columns}
         data={therapists}
         enableRowSelection
@@ -225,6 +227,9 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
                     onClick={sendEmail}
                     variant="contained"
                     startIcon={<EmailIcon />}
+                    sx={{
+                      width: "80px",
+                    }}
                   >
                     ({table.getSelectedRowModel().flatRows.length})
                   </Button>
@@ -238,6 +243,9 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
                     onClick={copyEmails}
                     variant="contained"
                     startIcon={<ContentCopyIcon />}
+                    sx={{
+                      width: "80px",
+                    }}
                   >
                     ({table.getSelectedRowModel().flatRows.length})
                   </Button>
