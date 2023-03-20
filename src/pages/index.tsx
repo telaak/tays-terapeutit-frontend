@@ -116,6 +116,52 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         header: "Kohde",
         size: 50,
       },
+      {
+        accessorFn: (row) => row.Vastaanotot.join(", "),
+        id: "Vastaanotot",
+        header: "Vastaanotot",
+        size: 50,
+      },
+      {
+        accessorKey: "Kela",
+        header: "Kela",
+        size: 50,
+      },
+      {
+        accessorKey: "Kelalisätiedot",
+        header: "Kela lisätiedot",
+        size: 50,
+      },
+      {
+        accessorKey: "Kieli",
+        header: "Kieli",
+        size: 50,
+      },
+      {
+        accessorKey: "Kotisivut",
+        header: "Kotisivut",
+        size: 50,
+      },
+      {
+        accessorKey: "Koulutus",
+        header: "Koulutus",
+        size: 50,
+      },
+      {
+        accessorKey: "Lisätiedot",
+        header: "Lisätiedot",
+        size: 50,
+      },
+      {
+        accessorKey: "Puhelin",
+        header: "Puhelin",
+        size: 50,
+      },
+      {
+        accessorKey: "Sähköposti",
+        header: "Sähköposti",
+        size: 50,
+      },
     ],
     []
   );
@@ -139,6 +185,20 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         enableBottomToolbar={false}
         enableFullScreenToggle={false}
         localization={MRT_Localization_FI}
+        initialState={{
+          columnVisibility: {
+            Vastaanotot: false,
+            Ajavanraus: false,
+            Kela: false,
+            Kelalisätiedot: false,
+            Kieli: false,
+            Kotisivut: false,
+            Koulutus: false,
+            Lisätiedot: false,
+            Puhelin: false,
+            Sähköposti: false
+          },
+        }}
         renderTopToolbarCustomActions={({ table }) => {
           const sendEmail = () => {
             const filteredEmails = parseEmails(table);
@@ -251,6 +311,14 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
                     <ListItemText
                       secondary={terapeutti.Kotisivut}
                       primary="Kotisivut"
+                    />
+                  </ListItem>
+                  <ListItem disablePadding>
+                    <ListItemText
+                      secondary={
+                        <a href={terapeutti.href}>{terapeutti.href}</a>
+                      }
+                      primary="TAYS-sivu"
                     />
                   </ListItem>
                 </List>
