@@ -5,6 +5,7 @@ import {
   ListItem,
   ListItemText,
   Stack,
+  Tooltip,
 } from "@mui/material";
 import axios from "axios";
 import MaterialReactTable, {
@@ -15,6 +16,7 @@ import Head from "next/head";
 import { useMemo } from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import SendIcon from "@mui/icons-material/Send";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { MRT_Localization_FI } from "@/fi-i18";
 
 type Terapeutti = {
@@ -213,25 +215,33 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
             navigator.clipboard.writeText(filteredEmails.join(","));
           };
           return (
-            <Stack direction={"row"} spacing={2}>
-              <Button
-                disabled={!isSelected(table)}
-                color="primary"
-                onClick={sendEmail}
-                variant="contained"
-                startIcon={<SendIcon />}
-              >
-                Lähetä ({table.getSelectedRowModel().flatRows.length})
-              </Button>
-              <Button
-                disabled={!isSelected(table)}
-                color="primary"
-                onClick={copyEmails}
-                variant="contained"
-                startIcon={<EmailIcon />}
-              >
-                Kopioi ({table.getSelectedRowModel().flatRows.length})
-              </Button>
+            <Stack direction={"row"} spacing={1}>
+              <Tooltip title={"Lähetä sähköposti"}>
+                <span>
+                  <Button
+                    disabled={!isSelected(table)}
+                    color="primary"
+                    onClick={sendEmail}
+                    variant="contained"
+                    startIcon={<EmailIcon />}
+                  >
+                    ({table.getSelectedRowModel().flatRows.length})
+                  </Button>
+                </span>
+              </Tooltip>
+              <Tooltip title={"Kopioi osoitteet"}>
+                <span>
+                  <Button
+                    disabled={!isSelected(table)}
+                    color="primary"
+                    onClick={copyEmails}
+                    variant="contained"
+                    startIcon={<ContentCopyIcon />}
+                  >
+                    ({table.getSelectedRowModel().flatRows.length})
+                  </Button>
+                </span>
+              </Tooltip>
             </Stack>
           );
         }}
