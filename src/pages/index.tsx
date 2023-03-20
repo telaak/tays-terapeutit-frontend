@@ -62,11 +62,12 @@ const parseEmails = (table: MRT_TableInstance<Terapeutti>) => {
   const emails = table.getSelectedRowModel().flatRows.map((row) => {
     const therapist = row.original as Terapeutti;
     const parsedEmail = therapist.Sähköposti.replace(
-      "etunimi",
+      /etunimi|etu-nimi/,
       therapist.Etunimi
     )
-      .replace("sukunimi", therapist.Sukunimi)
-      .replace("(at)", "@");
+      .replace(/sukunimi|suku-nimi/, therapist.Sukunimi)
+      .replace("(at)", "@")
+      .toLowerCase();
     return parsedEmail;
   });
   const filteredEmails = emails.filter((e) => emailRegex.test(e));
@@ -196,7 +197,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
             Koulutus: false,
             Lisätiedot: false,
             Puhelin: false,
-            Sähköposti: false
+            Sähköposti: false,
           },
         }}
         renderTopToolbarCustomActions={({ table }) => {
