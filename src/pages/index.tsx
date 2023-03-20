@@ -1,4 +1,11 @@
-import { Button, Grid, List, ListItem, ListItemText } from "@mui/material";
+import {
+  Button,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  Stack,
+} from "@mui/material";
 import axios from "axios";
 import MaterialReactTable, {
   MRT_ColumnDef,
@@ -8,6 +15,7 @@ import Head from "next/head";
 import { useMemo } from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import SendIcon from "@mui/icons-material/Send";
+import { MRT_Localization_FI } from "@/fi-i18";
 
 type Terapeutti = {
   Etunimi: string;
@@ -69,6 +77,15 @@ const parseEmails = (table: MRT_TableInstance<Terapeutti>) => {
   return filteredEmails;
 };
 
+const isSelected = (table: MRT_TableInstance<Terapeutti>) => {
+  if (table.getIsAllRowsSelected()) {
+    return true;
+  } else if (table.getIsSomeRowsSelected()) {
+    return true;
+  }
+  return false;
+};
+
 export default function Table({ therapists }: { therapists: Terapeutti[] }) {
   const columns = useMemo<MRT_ColumnDef<Terapeutti>[]>(
     () => [
@@ -110,16 +127,18 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <MaterialReactTable
+        muiTableContainerProps={{ sx: { height: "calc(100vh - 56px)" } }}
         columns={columns}
         data={therapists}
         enableRowSelection
         enableGrouping
         enableColumnFilterModes
         enableStickyHeader
+        positionToolbarAlertBanner="none"
         enablePagination={false}
         enableBottomToolbar={false}
         enableFullScreenToggle={false}
-        muiTableContainerProps={{ sx: { maxHeight: 'calc(100vh - 56px)' } }}
+        localization={MRT_Localization_FI}
         renderTopToolbarCustomActions={({ table }) => {
           const sendEmail = () => {
             const filteredEmails = parseEmails(table);
@@ -133,26 +152,26 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
             navigator.clipboard.writeText(filteredEmails.join(","));
           };
           return (
-            <div style={{ display: "flex", gap: "0.5rem" }}>
+            <Stack direction={"row"} spacing={2}>
               <Button
-                disabled={!table.getIsSomeRowsSelected()}
+                disabled={!isSelected(table)}
                 color="primary"
                 onClick={sendEmail}
                 variant="contained"
                 startIcon={<SendIcon />}
               >
-                Lähetä
+                Lähetä ({table.getSelectedRowModel().flatRows.length})
               </Button>
               <Button
-                disabled={!table.getIsSomeRowsSelected()}
+                disabled={!isSelected(table)}
                 color="primary"
                 onClick={copyEmails}
                 variant="contained"
                 startIcon={<EmailIcon />}
               >
-                Kopioi
+                Kopioi ({table.getSelectedRowModel().flatRows.length})
               </Button>
-            </div>
+            </Stack>
           );
         }}
         renderDetailPanel={({ row }) => {
@@ -220,7 +239,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
                   </ListItem>
                 </List>
               </Grid>
-              <Grid item lg={2} md={4} xs={6}>
+              <Grid item lg={2} md={4} xs={12}>
                 <List>
                   <ListItem disablePadding>
                     <ListItemText
