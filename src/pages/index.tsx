@@ -189,6 +189,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         enableFullScreenToggle={false}
         localization={MRT_Localization_FI}
         initialState={{
+          showGlobalFilter: true,
           columnVisibility: {
             Vastaanotot: false,
             Ajavanraus: false,
