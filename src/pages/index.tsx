@@ -113,21 +113,13 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         columns={columns}
         data={therapists}
         enableRowSelection
-        enableGrouping={true}
+        enableGrouping
         enableColumnFilterModes
-        enableStickyHeader={true}
+        enableStickyHeader
+        enablePagination={false}
+        enableBottomToolbar={false}
         enableFullScreenToggle={false}
-        initialState={{
-          pagination: {
-            pageIndex: 0,
-            pageSize: 150,
-          },
-        }}
-        muiTablePaginationProps={{
-          rowsPerPageOptions: [10, 25, 50, 100, 150],
-          showFirstButton: false,
-          showLastButton: false,
-        }}
+        muiTableContainerProps={{ sx: { maxHeight: 'calc(100vh - 56px)' } }}
         renderTopToolbarCustomActions={({ table }) => {
           const sendEmail = () => {
             const filteredEmails = parseEmails(table);
