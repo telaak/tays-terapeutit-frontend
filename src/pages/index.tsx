@@ -1,11 +1,15 @@
-import { Button, Grid, List, ListItem, ListItemText } from "@mui/material";
+import { Box, Button, Grid, List, ListItem, ListItemText } from "@mui/material";
 import axios from "axios";
 import MaterialReactTable, {
   MRT_ColumnDef,
+  MRT_FullScreenToggleButton,
   MRT_TableInstance,
+  MRT_ToggleDensePaddingButton,
+  MRT_ToggleFiltersButton,
+  MRT_ToggleGlobalFilterButton,
 } from "material-react-table";
 import Head from "next/head";
-import { useMemo } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import SendIcon from "@mui/icons-material/Send";
 
@@ -54,11 +58,12 @@ const parseEmails = (table: MRT_TableInstance<Terapeutti>) => {
   const emails = table.getSelectedRowModel().flatRows.map((row) => {
     const therapist = row.original as Terapeutti;
     const parsedEmail = therapist.Sähköposti.replace(
-      "etunimi",
+      /etunimi|etu-nimi/,
       therapist.Etunimi
     )
-      .replace("sukunimi", therapist.Sukunimi)
-      .replace("(at)", "@");
+      .replace(/sukunimi|suku-nimi/, therapist.Sukunimi)
+      .replace("(at)", "@")
+      .toLowerCase();
     return parsedEmail;
   });
   const filteredEmails = emails.filter((e) => emailRegex.test(e));
@@ -70,6 +75,12 @@ const parseEmails = (table: MRT_TableInstance<Terapeutti>) => {
 };
 
 export default function Table({ therapists }: { therapists: Terapeutti[] }) {
+  const rerender = useReducer(() => ({}), {})[1];
+  const tableInstanceRef = useRef<MRT_TableInstance<Terapeutti>>(null);
+  setInterval(() => {
+    // rerender();
+  }, 2500);
+
   const columns = useMemo<MRT_ColumnDef<Terapeutti>[]>(
     () => [
       {
@@ -102,6 +113,15 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
     ],
     []
   );
+  const [rowSelection, setRowSelection] = useState({});
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+    timeout = setTimeout(() => {
+      // rerender();
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [rowSelection]);
 
   return (
     <>
@@ -110,17 +130,26 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <MaterialReactTable
+        state={{ rowSelection }}
+        onRowSelectionChange={(data) => {
+          if (typeof data === "function") {
+            setRowSelection(data(rowSelection));
+          }
+        }}
+
+        muiTableContainerProps={{ sx: { height: "calc(100vh - 56px - 56px)" } }}
+        tableInstanceRef={tableInstanceRef}
         columns={columns}
         data={therapists}
         enableRowSelection
         enableGrouping
         enableColumnFilterModes
         enableStickyHeader
+        positionToolbarAlertBanner="bottom"
         enablePagination={false}
-        enableBottomToolbar={false}
+        enableBottomToolbar={true}
         enableFullScreenToggle={false}
-        muiTableContainerProps={{ sx: { maxHeight: 'calc(100vh - 56px)' } }}
-        renderTopToolbarCustomActions={({ table }) => {
+        renderToolbarInternalActions={({ table }) => {
           const sendEmail = () => {
             const filteredEmails = parseEmails(table);
             let mail = document.createElement("a");
@@ -133,9 +162,9 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
             navigator.clipboard.writeText(filteredEmails.join(","));
           };
           return (
-            <div style={{ display: "flex", gap: "0.5rem" }}>
+            <>
               <Button
-                disabled={!table.getIsSomeRowsSelected()}
+                disabled={!Object.entries(rowSelection).length}
                 color="primary"
                 onClick={sendEmail}
                 variant="contained"
@@ -152,7 +181,10 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
               >
                 Kopioi
               </Button>
-            </div>
+              <MRT_ToggleGlobalFilterButton table={table} />
+              <MRT_ToggleFiltersButton table={table} />
+              <MRT_ToggleDensePaddingButton table={table} />
+            </>
           );
         }}
         renderDetailPanel={({ row }) => {
