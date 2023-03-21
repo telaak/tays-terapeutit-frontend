@@ -3,13 +3,13 @@ body {
 }
 
 .table-container {
-  height: calc(100dvh - 56px);
   height: calc(100vh - 56px);
+  height: calc(100dvh - 56px);
 }
 
 @media (max-width: 463px) {
   .table-container {
-    height: calc(100dvh - 88px);
     height: calc(100vh - 88px);
+    height: calc(100dvh - 88px);
   }
 }
