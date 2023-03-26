@@ -68,6 +68,8 @@ const parseEmails = (table: MRT_TableInstance<Terapeutti>) => {
     )
       .replace(/sukunimi|suku-nimi/, therapist.Sukunimi)
       .replace("(at)", "@")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase();
     return parsedEmail;
   });
@@ -176,9 +178,11 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
       </Head>
       <MaterialReactTable
         muiTableContainerProps={{ className: "table-container" }}
-        muiSearchTextFieldProps={{sx: {
-          width: '10em'
-        }}}
+        muiSearchTextFieldProps={{
+          sx: {
+            width: "10em",
+          },
+        }}
         columns={columns}
         data={therapists}
         enableRowSelection
