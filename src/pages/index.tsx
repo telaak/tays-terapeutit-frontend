@@ -10,16 +10,12 @@ import {
 import axios from "axios";
 import MaterialReactTable, {
   MRT_ColumnDef,
-  MRT_Localization,
   MRT_TableInstance,
 } from "material-react-table";
 import Head from "next/head";
 import { useMemo } from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useRouter } from "next/router";
-import { MRT_Localization_SV } from "material-react-table/locales/sv";
-import { MRT_Localization_EN } from "material-react-table/locales/en";
 import { MRT_Localization_FI } from "@/fi-i18";
 
 type Terapeutti = {
@@ -94,42 +90,7 @@ const isSelected = (table: MRT_TableInstance<Terapeutti>) => {
   return false;
 };
 
-function getLocale(locale: string): MRT_Localization {
-  switch (locale) {
-    case "fi-FI":
-      return MRT_Localization_FI;
-    case "sv-SE":
-      return MRT_Localization_SV;
-    default:
-      return MRT_Localization_EN;
-  }
-}
-
-function getSendEmailTooltip(locale: string) {
-  switch (locale) {
-    case "fi-FI":
-      return "Lähetä sähköposti";
-    case "sv-SE":
-      return "Skicka e-post";
-    default:
-      return "Send email";
-  }
-}
-
-function getCopyTooltip(locale: string) {
-  switch (locale) {
-    case "fi-FI":
-      return "Kopioi sähköpostiosoitte(et)";
-    case "sv-SE":
-      return "Kopiera e-postadress(er)";
-    default:
-      return "Copy email address(es)";
-  }
-}
-
 export default function Table({ therapists }: { therapists: Terapeutti[] }) {
-  const { locale } = useRouter();
-
   const columns = useMemo<MRT_ColumnDef<Terapeutti>[]>(
     () => [
       {
@@ -232,7 +193,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         enablePagination={false}
         enableBottomToolbar={false}
         enableFullScreenToggle={false}
-        localization={getLocale(locale as string)}
+        localization={MRT_Localization_FI}
         initialState={{
           showGlobalFilter: true,
           columnVisibility: {
@@ -262,7 +223,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
           };
           return (
             <Stack direction={"row"} spacing={1}>
-              <Tooltip title={getSendEmailTooltip(locale as string)}>
+              <Tooltip title={"Lähetä sähköposti"}>
                 <span>
                   <Button
                     disabled={!isSelected(table)}
@@ -278,7 +239,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
                   </Button>
                 </span>
               </Tooltip>
-              <Tooltip title={getCopyTooltip(locale as string)}>
+              <Tooltip title={"Kopioi osoitteet"}>
                 <span>
                   <Button
                     disabled={!isSelected(table)}
