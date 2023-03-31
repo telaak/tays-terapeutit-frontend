@@ -13,3 +13,10 @@ body {
     height: calc(100dvh - 88px);
   }
 }
+
+.detail-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+}
+

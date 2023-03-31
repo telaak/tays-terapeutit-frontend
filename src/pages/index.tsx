@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Grid,
   List,
@@ -6,6 +7,7 @@ import {
   ListItemText,
   Stack,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import MaterialReactTable, {
@@ -222,9 +224,18 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
             navigator.clipboard.writeText(filteredEmails.join(","));
           };
           return (
-            <Stack direction={"row"} spacing={1}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
               <Tooltip title={"Lähetä sähköposti"}>
-                <span>
+                <span
+                  style={{
+                    marginRight: "0.5em",
+                  }}
+                >
                   <Button
                     disabled={!isSelected(table)}
                     color="primary"
@@ -255,102 +266,156 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
                   </Button>
                 </span>
               </Tooltip>
-            </Stack>
+            </Box>
           );
         }}
         renderDetailPanel={({ row }) => {
           const terapeutti = row.original;
           return (
-            <Grid container spacing={3}>
-              <Grid item lg={2} md={4} xs={6}>
-                <List>
-                  <ListItem disablePadding>
-                    <ListItemText
-                      secondary={terapeutti.Vastaanotot.join(", ")}
-                      primary="Vastaanotot"
-                    />
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemText
-                      secondary={terapeutti.Ajanvaraus}
-                      primary="Ajanvaraus"
-                    />
-                  </ListItem>
-                </List>
-              </Grid>
-              <Grid item lg={2} md={4} xs={6}>
-                <List>
-                  <ListItem disablePadding>
-                    <ListItemText
-                      secondary={terapeutti.Puhelin}
-                      primary="Puhelinnumero"
-                    />
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemText
-                      secondary={terapeutti.Sähköposti}
-                      primary="Sähköposti"
-                    />
-                  </ListItem>
-                </List>
-              </Grid>
-              <Grid item lg={2} md={4} xs={6}>
-                <List>
-                  <ListItem disablePadding>
-                    <ListItemText
-                      secondary={terapeutti.Koulutus}
-                      primary="Koulutus"
-                    />
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemText
-                      secondary={terapeutti.Kieli}
-                      primary="Kieli"
-                    />
-                  </ListItem>
-                </List>
-              </Grid>
-              <Grid item lg={2} md={4} xs={6}>
-                <List>
-                  <ListItem disablePadding>
-                    <ListItemText secondary={terapeutti.Kela} primary="Kela" />
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemText
-                      secondary={terapeutti.Kelalisätiedot}
-                      primary="Kela lisätiedot"
-                    />
-                  </ListItem>
-                </List>
-              </Grid>
-              <Grid item lg={2} md={4} xs={12}>
-                <List>
-                  <ListItem disablePadding>
-                    <ListItemText
-                      secondary={terapeutti.Lisätiedot}
-                      primary="Lisätiedot"
-                    />
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemText
-                      secondary={terapeutti.Kotisivut}
-                      primary="Kotisivut"
-                    />
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemText
-                      secondary={
-                        <a href={terapeutti.href}>{terapeutti.href}</a>
-                      }
-                      primary="TAYS-sivu"
-                    />
-                  </ListItem>
-                </List>
-              </Grid>
-            </Grid>
+            <div className="detail-container">
+              <DetailBox
+                title="Vastaanotot"
+                content={terapeutti.Vastaanotot.join("\n")}
+              />
+              <DetailBox title="Ajanvaraus" content={terapeutti.Ajanvaraus} />
+              <DetailBox title="Puhelin" content={terapeutti.Puhelin} />
+              <DetailBox title="Sähköposti" content={terapeutti.Sähköposti} />
+              <DetailBox title="Kieli" content={terapeutti.Kieli} />
+              <DetailBox
+                title="Kotisivut"
+                link
+                content={`${terapeutti.Kotisivut}`}
+              />
+              <DetailBox
+                title="TAYS"
+                link
+                content={terapeutti.href as string}
+              />
+              <DetailBox title="Kela" content={terapeutti.Kela} />
+              <DetailBox
+                title="Kela lisätiedot"
+                content={terapeutti.Kelalisätiedot}
+              />
+              <DetailBox title="Koulutus" content={terapeutti.Koulutus} />
+              <DetailBox title="Lisätiedot" content={terapeutti.Lisätiedot} />
+            </div>
+            // <Grid container spacing={3}>
+            //   <Grid item lg={2} md={4} xs={6}>
+            //     <List>
+            //       <ListItem disablePadding>
+            //         <ListItemText
+            //           secondary={terapeutti.Vastaanotot.join(", ")}
+            //           primary="Vastaanotot"
+            //         />
+            //       </ListItem>
+            //       <ListItem disablePadding>
+            //         <ListItemText
+            //           secondary={terapeutti.Ajanvaraus}
+            //           primary="Ajanvaraus"
+            //         />
+            //       </ListItem>
+            //     </List>
+            //   </Grid>
+            //   <Grid item lg={2} md={4} xs={6}>
+            //     <List>
+            //       <ListItem disablePadding>
+            //         <ListItemText
+            //           secondary={terapeutti.Puhelin}
+            //           primary="Puhelinnumero"
+            //         />
+            //       </ListItem>
+            //       <ListItem disablePadding>
+            //         <ListItemText
+            //           secondary={terapeutti.Sähköposti}
+            //           primary="Sähköposti"
+            //         />
+            //       </ListItem>
+            //     </List>
+            //   </Grid>
+            //   <Grid item lg={2} md={4} xs={6}>
+            //     <List>
+            //       <ListItem disablePadding>
+            //         <ListItemText
+            //           secondary={terapeutti.Koulutus}
+            //           primary="Koulutus"
+            //         />
+            //       </ListItem>
+            //       <ListItem disablePadding>
+            //         <ListItemText
+            //           secondary={terapeutti.Kieli}
+            //           primary="Kieli"
+            //         />
+            //       </ListItem>
+            //     </List>
+            //   </Grid>
+            //   <Grid item lg={2} md={4} xs={6}>
+            //     <List>
+            //       <ListItem disablePadding>
+            //         <ListItemText secondary={terapeutti.Kela} primary="Kela" />
+            //       </ListItem>
+            //       <ListItem disablePadding>
+            //         <ListItemText
+            //           secondary={terapeutti.Kelalisätiedot}
+            //           primary="Kela lisätiedot"
+            //         />
+            //       </ListItem>
+            //     </List>
+            //   </Grid>
+            //   <Grid item lg={2} md={4} xs={12}>
+            //     <List>
+            //       <ListItem disablePadding>
+            //         <ListItemText
+            //           secondary={terapeutti.Lisätiedot}
+            //           primary="Lisätiedot"
+            //         />
+            //       </ListItem>
+            //       <ListItem disablePadding>
+            //         <ListItemText
+            //           secondary={terapeutti.Kotisivut}
+            //           primary="Kotisivut"
+            //         />
+            //       </ListItem>
+            //       <ListItem disablePadding>
+            //         <ListItemText
+            //           secondary={
+            //             <a href={terapeutti.href}>{terapeutti.href}</a>
+            //           }
+            //           primary="TAYS-sivu"
+            //         />
+            //       </ListItem>
+            //     </List>
+            //   </Grid>
+            // </Grid>
           );
         }}
       />
     </>
+  );
+}
+
+function DetailBox({
+  title,
+  content,
+  link = false,
+}: {
+  title: string;
+  content: string;
+  link?: boolean;
+}) {
+  return (
+    <Box>
+      <Typography variant="h6" gutterBottom>
+        {title}
+      </Typography>
+      {link ? (
+        <a href={content.startsWith("http") ? content : `//${content}`}>
+          {content}
+        </a>
+      ) : (
+        <Typography variant="body2" gutterBottom>
+          {content}
+        </Typography>
+      )}
+    </Box>
   );
 }
