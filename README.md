@@ -1,38 +1,60 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Tays Terapeuttihakemiston taulukkosivu
 
-## Getting Started
+Taulukkosivu, joka mahdollistaa Taysin terapeuttihakemiston datan järjestämisen, selaamisen, suodattamisen sekä automatisoi sähköpostien lähettämistä.
 
-First, run the development server:
+## Kuvaus
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+Ohjelma hakee projektin toiselta osiolta rajapinnasta terapeuttien tiedon ja muodostaa niistä yksinkertaisen taulukkonäkymän. Taulukon jokainen sarake on erikseen järjestettävissä, suodatettavissa sekä piilotettavissa. Terapeutteja voidaan helposti valita yksi tai useampi suodatuksen jälkeen, jolloin sähköpostin lähettäminen heille on helppoa.
+
+### Kuvankaappauksia 
+
+Päänäkymä
+![image](https://user-images.githubusercontent.com/35933416/235946615-34ae7a93-756f-491a-be37-cbae98f0b7c9.png) 
+
+Ryhmitys
+![image](https://user-images.githubusercontent.com/35933416/235947007-bac7e357-a3f0-4de6-b999-d8b2170e3e14.png)
+
+
+## Aloittaminen
+
+### Vaatimukset
+
+* Next.js
+* https://github.com/telaak/tays-terapeutit-backend
+
+### Asentaminen
+
+1. `git pull github.com/telaak/tays-terapeutit-frontend.git`
+2. Asenna paketit `npm i`
+3. Aja Next.js `npx next build`
+4. Täytä vaadittavat ympäristömuuttujat:
+      * NEXT_PUBLIC_BACKEND_URL (.env.production -tiedostoon, osoite rajapintaan)
+      * REVALIDATE_TOKEN (sama kuin rajapinnalla)
+5. Käynnistä palvelin `npx next start`
+
+
+### Docker
+
+## Build
+
+* `docker build -t username/tays-terapeutit-frontend`
+
+## Compose
+
+```
+version: '3.8'
+
+services:
+    
+  frontend:
+    image: telaaks/tays-terapeutit-frontend
+    restart: always
+    environment:
+      - REVALIDATE_TOKEN=jotain
+    ports:
+      - 3000:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## License
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project is licensed under the MIT License - see the LICENSE.md file for details
