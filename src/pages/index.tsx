@@ -156,6 +156,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
     localization: MRT_Localization_FI,
     enableFacetedValues: true,
     initialState: {
+      isFullScreen: true,
       showGlobalFilter: true,
       showColumnFilters: true,
       columnVisibility: {
