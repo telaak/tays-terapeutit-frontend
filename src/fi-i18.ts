@@ -69,8 +69,7 @@ export const MRT_Localization_FI: MRT_Localization = {
   rowsPerPage: 'Riviä sivulla',
   save: 'Tallenna',
   search: 'Haku',
-  selectedCountOfRowCountRowsSelected:
-    '{selectedCount}/{rowCount} rivi(ä) valittuna',
+  selectedCountOfRowCountRowsSelected: '{selectedCount}/{rowCount} rivi(ä) valittuna',
   select: 'Valitse',
   showAll: 'Näytä kaikki',
   showAllColumns: 'Näytä kaikki sarakkeet',
@@ -90,5 +89,5 @@ export const MRT_Localization_FI: MRT_Localization = {
   ungroupByColumn: 'Poista sarakkeen {column} ryhmitys',
   unpin: 'Irrota',
   unpinAll: 'Irrota kaikki',
-  unsorted: 'Ei järjestystä',
+  pin: "Kiinnitä"
 };
