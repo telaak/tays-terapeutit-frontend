@@ -10,6 +10,7 @@ import { MRT_Localization_FI } from "@/fi-i18";
 import { Terapeutti } from "@/types";
 import { DetailPanel } from "../../components/detailPanel";
 import { CustomActions } from "../../components/topToolbarCustomActions";
+import { parseEmail } from "@/helperFunctions";
 
 export const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`;
 
@@ -86,19 +87,6 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         filterVariant: "autocomplete",
       },
       {
-        accessorKey: "Kotisivut",
-        header: "Kotisivut",
-        size: 120,
-        accessorFn: (row) => (row.Kotisivut ? true : false),
-        Cell: ({ row }) => <>{row.original.Kotisivut}</>,
-        filterVariant: "checkbox",
-        muiTableBodyCellProps: {
-          sx: {
-            wordBreak: "break-all",
-          },
-        },
-      },
-      {
         accessorKey: "Koulutus",
         header: "Koulutus",
         size: 200,
@@ -114,6 +102,19 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         size: 130,
       },
       {
+        accessorKey: "Sähköposti",
+        header: "Sähköposti",
+        size: 155,
+        accessorFn: (row) => (row.Sähköposti ? true : false),
+        Cell: ({ row }) => <>{parseEmail(row.original)}</>,
+        filterVariant: "checkbox",
+        muiTableBodyCellProps: {
+          sx: {
+            wordBreak: "break-all",
+          },
+        },
+      },
+      {
         accessorKey: "Puhelin",
         header: "Puhelin",
         size: 100,
@@ -122,11 +123,11 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         filterVariant: "checkbox",
       },
       {
-        accessorKey: "Sähköposti",
-        header: "Sähköposti",
-        size: 155,
-        accessorFn: (row) => (row.Sähköposti ? true : false),
-        Cell: ({ row }) => <>{row.original.Sähköposti}</>,
+        accessorKey: "Kotisivut",
+        header: "Kotisivut",
+        size: 120,
+        accessorFn: (row) => (row.Kotisivut ? true : false),
+        Cell: ({ row }) => <>{row.original.Kotisivut}</>,
         filterVariant: "checkbox",
         muiTableBodyCellProps: {
           sx: {
