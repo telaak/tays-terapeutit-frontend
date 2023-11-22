@@ -42,7 +42,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
       {
         accessorKey: "Suuntaus",
         header: "Suuntaus",
-        size: 130,
+        size: 180,
         filterVariant: "autocomplete",
       },
       {
@@ -161,6 +161,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         Vastaanotot: true,
         Ajanvaraus: false,
         Kela: false,
+        Kohderyhmä: false,
         Paikkakunta: false,
         Kelalisätiedot: true,
         Kieli: false,
