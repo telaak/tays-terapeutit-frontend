@@ -23,7 +23,7 @@ export const MRT_Localization_FI: MRT_Localization = {
   filterArrIncludesSome: 'Sisältää',
   filterBetween: 'Välillä',
   filterBetweenInclusive: 'Välillä (inklusiivinen)',
-  filterByColumn: 'Suodata sarakkeella {column}',
+  filterByColumn: '',
   filterContains: 'Sisältää',
   filterEmpty: 'Tyhjä',
   filterEndsWith: 'Loppuu',
