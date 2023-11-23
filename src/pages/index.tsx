@@ -14,14 +14,14 @@ import { useEffect, useMemo, useState } from "react";
 import { MRT_Localization_FI } from "@/fi-i18";
 import { Terapeutti } from "@/types";
 import { Stack, AppBar, Toolbar, Paper, Box } from "@mui/material";
-import { CopyEmailsButton } from "../../components/CopyEmailsButton";
-import { SendEmailsButton } from "../../components/SendEmailsButton";
-import { CardDetailPanel } from "../../components/CardDetailPanel";
-import { HomePageLink } from "../../components/HomePageLink";
-import { SähköpostiCell } from "../../components/SähköpostiCell";
-import { PuhelinCell } from "../../components/PuhelinCell";
+import { CopyEmailsButton } from "../components/CopyEmailsButton";
+import { SendEmailsButton } from "../components/SendEmailsButton";
+import { CardDetailPanel } from "../components/CardDetailPanel";
+import { HomePageLink } from "../components/HomePageLink";
+import { SähköpostiCell } from "../components/SähköpostiCell";
+import { PuhelinCell } from "../components/PuhelinCell";
 
-export const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`;
+export const apiUrl = `${process.env.BACKEND_URL}`;
 
 export const getTherapists = async (): Promise<Terapeutti[]> => {
   const res = await axios.get(`${apiUrl}/therapists`);
