@@ -13,12 +13,13 @@ import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
 import { MRT_Localization_FI } from "@/fi-i18";
 import { Terapeutti } from "@/types";
-import { parseEmail } from "@/helperFunctions";
 import { Stack, AppBar, Toolbar, Paper, Box } from "@mui/material";
 import { CopyEmailsButton } from "../../components/CopyEmailsButton";
 import { SendEmailsButton } from "../../components/SendEmailsButton";
 import { CardDetailPanel } from "../../components/CardDetailPanel";
 import { HomePageLink } from "../../components/HomePageLink";
+import { SähköpostiCell } from "../../components/SähköpostiCell";
+import { PuhelinCell } from "../../components/PuhelinCell";
 
 export const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`;
 
@@ -120,10 +121,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         header: "Sähköposti",
         size: 155,
         accessorFn: (row) => (row.Sähköposti ? true : false),
-        Cell: ({ row }) => {
-          const parsedEmail = parseEmail(row.original);
-          return <a href={`mailto:${parsedEmail}`}>{parsedEmail}</a>;
-        },
+        Cell: ({ row }) => <SähköpostiCell row={row} />,
         filterVariant: "checkbox",
         muiTableBodyCellProps: {
           sx: {
@@ -137,12 +135,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         header: "Puhelin",
         size: 100,
         accessorFn: (row) => (row.Puhelin ? true : false),
-        Cell: ({ row }) => {
-          const parsedNumber = row.original.Puhelin
-            ? row.original.Puhelin.replace(/\D/g, "")
-            : "";
-          return <a href={`tel:${parsedNumber}`}>{row.original.Puhelin}</a>;
-        },
+        Cell: ({ row }) => <PuhelinCell row={row} />,
         filterVariant: "checkbox",
       },
       {
