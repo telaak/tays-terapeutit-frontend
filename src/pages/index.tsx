@@ -212,10 +212,6 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         <title>TAYS Terapeuttihakemisto</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Head>
-        <title>KELA Terapeuttihakemisto</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
       <Stack>
         <AppBar color="primary" position="fixed">
           <Toolbar
