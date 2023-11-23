@@ -51,8 +51,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
       {
         accessorKey: "Suuntaus",
         header: "Suuntaus",
-        size: 180,
-        filterVariant: "autocomplete",
+        size: 120,
       },
       {
         accessorKey: "Tilaa",
