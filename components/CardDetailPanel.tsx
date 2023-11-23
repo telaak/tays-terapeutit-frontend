@@ -9,7 +9,7 @@ export function CardDetailPanel({ row }: { row: MRT_Row<Terapeutti> }) {
       <DetailCard title="Paikkakunta" content={row.original.Paikkakunta} />
       <DetailCard title="Kohderyhmä" content={row.original.Kohderyhmä} />
       <DetailCard title="Kieli" content={row.original.Kieli} />
-      <DetailCard title="Kotisivut" content={row.original.Kotisivut} />
+      <DetailCard title="Kotisivut" isLink content={row.original.Kotisivut} />
       <DetailCard title="Ajanvaraus" content={row.original.Ajanvaraus} />
       <DetailCard title="Koulutus" content={row.original.Koulutus} />
       <DetailCard title="Kela" content={row.original.Kela} />

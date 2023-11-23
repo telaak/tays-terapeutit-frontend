@@ -21,6 +21,7 @@ import { Stack, AppBar, Toolbar, Paper, Box } from "@mui/material";
 import { CopyEmailsButton } from "../../components/CopyEmailsButton";
 import { SendEmailsButton } from "../../components/SendEmailsButton";
 import { CardDetailPanel } from "../../components/CardDetailPanel";
+import { HomePageLink } from "../../components/HomePageLink";
 
 export const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`;
 
@@ -82,7 +83,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         Cell: ({ row }) => (
           <Stack spacing={2}>
             {row.original.Vastaanotot.map((vastaanotto) => (
-              <span>{vastaanotto.trim()}</span>
+              <span key={vastaanotto}>{vastaanotto.trim()}</span>
             ))}
           </Stack>
         ),
@@ -123,7 +124,10 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         header: "Sähköposti",
         size: 155,
         accessorFn: (row) => (row.Sähköposti ? true : false),
-        Cell: ({ row }) => <>{parseEmail(row.original)}</>,
+        Cell: ({ row }) => {
+          const parsedEmail = parseEmail(row.original);
+          return <a href={`mailto:${parsedEmail}`}>{parsedEmail}</a>;
+        },
         filterVariant: "checkbox",
         muiTableBodyCellProps: {
           sx: {
@@ -137,7 +141,12 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         header: "Puhelin",
         size: 100,
         accessorFn: (row) => (row.Puhelin ? true : false),
-        Cell: ({ row }) => <>{row.original.Puhelin}</>,
+        Cell: ({ row }) => {
+          const parsedNumber = row.original.Puhelin
+            ? row.original.Puhelin.replace(/\D/g, "")
+            : "";
+          return <a href={`tel:${parsedNumber}`}>{row.original.Puhelin}</a>;
+        },
         filterVariant: "checkbox",
       },
       {
@@ -145,7 +154,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         header: "Kotisivut",
         size: 120,
         accessorFn: (row) => (row.Kotisivut ? true : false),
-        Cell: ({ row }) => <>{row.original.Kotisivut}</>,
+        Cell: ({ row }) => <HomePageLink url={row.original.Kotisivut} />,
         filterVariant: "checkbox",
         muiTableBodyCellProps: {
           sx: {
@@ -173,7 +182,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
       showGlobalFilter: true,
       showColumnFilters: true,
       pagination: {
-        pageSize: 10,
+        pageSize: 50,
         pageIndex: 0,
       },
       columnVisibility: {
