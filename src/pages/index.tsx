@@ -2,6 +2,12 @@ import axios from "axios";
 import {
   MaterialReactTable,
   MRT_ColumnDef,
+  MRT_GlobalFilterTextField,
+  MRT_ShowHideColumnsButton,
+  MRT_TableContainer,
+  MRT_TablePagination,
+  MRT_ToggleDensePaddingButton,
+  MRT_ToggleFiltersButton,
   useMaterialReactTable,
 } from "material-react-table";
 import Head from "next/head";
@@ -11,6 +17,9 @@ import { Terapeutti } from "@/types";
 import { DetailPanel } from "../../components/detailPanel";
 import { CustomActions } from "../../components/topToolbarCustomActions";
 import { parseEmail } from "@/helperFunctions";
+import { Stack, AppBar, Toolbar, Paper, Box } from "@mui/material";
+import { CopyEmailsButton } from "../../components/CopyEmailsButton";
+import { SendEmailsButton } from "../../components/SendEmailsButton";
 
 export const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`;
 
@@ -65,10 +74,17 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         filterVariant: "autocomplete",
       },
       {
-        accessorFn: (row) => row.Vastaanotot.join(", "),
+        accessorFn: (row) => row.Vastaanotot.map((s) => s.trim()).join(", "),
         id: "Vastaanotot",
         header: "Vastaanotot",
         size: 150,
+        Cell: ({ row }) => (
+          <Stack spacing={2}>
+            {row.original.Vastaanotot.map((vastaanotto) => (
+              <span>{vastaanotto.trim()}</span>
+            ))}
+          </Stack>
+        ),
       },
       {
         accessorKey: "Kela",
@@ -111,6 +127,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         muiTableBodyCellProps: {
           sx: {
             wordBreak: "break-all",
+            border: "1px solid rgba(210, 210, 210, 1)",
           },
         },
       },
@@ -132,6 +149,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         muiTableBodyCellProps: {
           sx: {
             wordBreak: "break-all",
+            border: "1px solid rgba(210, 210, 210, 1)",
           },
         },
       },
@@ -139,26 +157,66 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
     []
   );
 
+  // const table = useMaterialReactTable({
+  //   columns,
+  //   data: therapists,
+  //   layoutMode: "grid-no-grow",
+  //  // muiTableContainerProps: { className: "table-container" },
+  //   enableRowSelection: true,
+  //   enableGrouping: true,
+  //   enableColumnFilterModes: true,
+  //   enableStickyHeader: false,
+  //   enableStickyFooter: false,
+  //   enableColumnDragging: false,
+  //   positionToolbarAlertBanner: "none",
+  //   enablePagination: false,
+  //   enableBottomToolbar: false,
+  //   enableFullScreenToggle: false,
+  //   localization: MRT_Localization_FI,
+  //   enableFacetedValues: true,
+  //   initialState: {
+  //     isFullScreen: false,
+  //     showGlobalFilter: true,
+  //     showColumnFilters: true,
+  //     columnVisibility: {
+  //       Vastaanotot: true,
+  //       Ajanvaraus: false,
+  //       Kela: false,
+  //       Kohderyhmä: false,
+  //       Paikkakunta: false,
+  //       Kelalisätiedot: true,
+  //       Kieli: false,
+  //       Kotisivut: false,
+  //       Koulutus: false,
+  //       Lisätiedot: false,
+  //       Puhelin: true,
+  //       Sähköposti: true,
+  //     },
+  //   },
+  //   renderTopToolbarCustomActions: ({ table }) => (
+  //     <CustomActions table={table} />
+  //   ),
+  //   renderDetailPanel: ({ row }) => <DetailPanel row={row} />,
+  // });
+
   const table = useMaterialReactTable({
     columns,
     data: therapists,
-    layoutMode: "grid-no-grow",
-    muiTableContainerProps: { className: "table-container" },
     enableRowSelection: true,
-    enableGrouping: true,
-    enableColumnFilterModes: true,
-    enableStickyHeader: true,
-    enableColumnDragging: false,
-    positionToolbarAlertBanner: "none",
-    enablePagination: false,
-    enableBottomToolbar: false,
-    enableFullScreenToggle: false,
-    localization: MRT_Localization_FI,
     enableFacetedValues: true,
+    localization: MRT_Localization_FI,
+    muiTableBodyCellProps: {
+      sx: {
+        border: "1px solid rgba(210, 210, 210, 1)",
+      },
+    },
     initialState: {
-      isFullScreen: true,
       showGlobalFilter: true,
       showColumnFilters: true,
+      pagination: {
+        pageSize: 50,
+        pageIndex: 0,
+      },
       columnVisibility: {
         Vastaanotot: true,
         Ajanvaraus: false,
@@ -174,9 +232,9 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         Sähköposti: true,
       },
     },
-    renderTopToolbarCustomActions: ({ table }) => (
-      <CustomActions table={table} />
-    ),
+    muiTableContainerProps: {
+      className: "table-container",
+    },
     renderDetailPanel: ({ row }) => <DetailPanel row={row} />,
   });
 
@@ -186,7 +244,43 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         <title>TAYS Terapeuttihakemisto</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <MaterialReactTable table={table} />
+      <Head>
+        <title>KELA Terapeuttihakemisto</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      <Stack>
+        <AppBar color="primary" position="fixed">
+          <Toolbar
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Stack direction={"row"} spacing={1}>
+              <Paper>
+                <CopyEmailsButton table={table} />
+              </Paper>
+              <Paper>
+                <SendEmailsButton table={table} />
+              </Paper>
+            </Stack>
+            <Paper>
+              <MRT_GlobalFilterTextField table={table} />
+            </Paper>
+            <Paper>
+              <Box sx={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <MRT_ToggleFiltersButton table={table} />
+                <MRT_ShowHideColumnsButton table={table} />
+                <MRT_ToggleDensePaddingButton table={table} />
+              </Box>
+            </Paper>
+          </Toolbar>
+        </AppBar>
+        <Toolbar />
+        <MRT_TablePagination table={table} />
+      </Stack>
+      <MRT_TableContainer table={table} />
+      <MRT_TablePagination table={table} />
     </>
   );
 }

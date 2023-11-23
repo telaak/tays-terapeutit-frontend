@@ -1,8 +1,9 @@
 body {
   margin: 0;
+  /* overflow: hidden; */
 }
 
-.table-container {
+/* .table-container {
   height: calc(100vh - 56px);
   height: calc(100dvh - 56px);
 }
@@ -19,4 +20,4 @@ body {
   grid-template-columns: repeat(4, 1fr);
   width: 100%;
 }
-
+ */
