@@ -1,6 +1,5 @@
 import axios from "axios";
 import {
-  MaterialReactTable,
   MRT_ColumnDef,
   MRT_GlobalFilterTextField,
   MRT_ShowHideColumnsButton,
@@ -11,11 +10,9 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import Head from "next/head";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MRT_Localization_FI } from "@/fi-i18";
 import { Terapeutti } from "@/types";
-import { DetailPanel } from "../../components/detailPanel";
-import { CustomActions } from "../../components/topToolbarCustomActions";
 import { parseEmail } from "@/helperFunctions";
 import { Stack, AppBar, Toolbar, Paper, Box } from "@mui/material";
 import { CopyEmailsButton } from "../../components/CopyEmailsButton";
@@ -167,6 +164,17 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
     []
   );
 
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 50,
+  });
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+    });
+  }, [pagination.pageIndex]);
+
   const table = useMaterialReactTable({
     columns,
     data: therapists,
@@ -181,10 +189,6 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
     initialState: {
       showGlobalFilter: true,
       showColumnFilters: true,
-      pagination: {
-        pageSize: 50,
-        pageIndex: 0,
-      },
       columnVisibility: {
         Vastaanotot: true,
         Ajanvaraus: false,
@@ -203,6 +207,8 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
     muiTableContainerProps: {
       className: "table-container",
     },
+    state: { pagination },
+    onPaginationChange: setPagination,
     renderDetailPanel: ({ row }) => <CardDetailPanel row={row} />,
   });
 
