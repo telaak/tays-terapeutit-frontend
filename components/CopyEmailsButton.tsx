@@ -10,7 +10,7 @@ export function CopyEmailsButton({ table }: { table: MRT_TableInstance<Terapeutt
       <span>
         <Button
           disabled={!isSelected(table)}
-          color="primary"
+          color="warning"
           onClick={() => copyEmails(table)}
           variant="contained"
           startIcon={<ContentCopyIcon />}

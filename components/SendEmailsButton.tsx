@@ -14,7 +14,7 @@ export function SendEmailsButton({
       <span>
         <Button
           disabled={!isSelected(table)}
-          color="primary"
+          color="warning"
           onClick={() => sendEmail(table)}
           variant="contained"
           startIcon={<EmailIcon />}
