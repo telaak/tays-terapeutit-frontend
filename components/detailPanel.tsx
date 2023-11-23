@@ -1,36 +1,8 @@
 import { Terapeutti } from "@/types";
 import { MRT_Row } from "material-react-table";
 import { DetailBox } from "./detailBox";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Grid,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState } from "react";
-
-function ExtraInfoAccordion({
-  title,
-  content,
-}: {
-  title: string;
-  content: string;
-}) {
-  return (
-    <Accordion>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>{title}</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Typography>{content}</Typography>
-      </AccordionDetails>
-    </Accordion>
-  );
-}
+import { Grid } from "@mui/material";
+import { ExtraInfoAccordion } from "./ExtraInfoAccordion";
 
 export function DetailPanel({ row }: { row: MRT_Row<Terapeutti> }) {
   const terapeutti = row.original;

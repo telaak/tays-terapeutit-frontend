@@ -20,6 +20,7 @@ import { parseEmail } from "@/helperFunctions";
 import { Stack, AppBar, Toolbar, Paper, Box } from "@mui/material";
 import { CopyEmailsButton } from "../../components/CopyEmailsButton";
 import { SendEmailsButton } from "../../components/SendEmailsButton";
+import { CardDetailPanel } from "../../components/CardDetailPanel";
 
 export const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`;
 
@@ -157,48 +158,6 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
     []
   );
 
-  // const table = useMaterialReactTable({
-  //   columns,
-  //   data: therapists,
-  //   layoutMode: "grid-no-grow",
-  //  // muiTableContainerProps: { className: "table-container" },
-  //   enableRowSelection: true,
-  //   enableGrouping: true,
-  //   enableColumnFilterModes: true,
-  //   enableStickyHeader: false,
-  //   enableStickyFooter: false,
-  //   enableColumnDragging: false,
-  //   positionToolbarAlertBanner: "none",
-  //   enablePagination: false,
-  //   enableBottomToolbar: false,
-  //   enableFullScreenToggle: false,
-  //   localization: MRT_Localization_FI,
-  //   enableFacetedValues: true,
-  //   initialState: {
-  //     isFullScreen: false,
-  //     showGlobalFilter: true,
-  //     showColumnFilters: true,
-  //     columnVisibility: {
-  //       Vastaanotot: true,
-  //       Ajanvaraus: false,
-  //       Kela: false,
-  //       Kohderyhmä: false,
-  //       Paikkakunta: false,
-  //       Kelalisätiedot: true,
-  //       Kieli: false,
-  //       Kotisivut: false,
-  //       Koulutus: false,
-  //       Lisätiedot: false,
-  //       Puhelin: true,
-  //       Sähköposti: true,
-  //     },
-  //   },
-  //   renderTopToolbarCustomActions: ({ table }) => (
-  //     <CustomActions table={table} />
-  //   ),
-  //   renderDetailPanel: ({ row }) => <DetailPanel row={row} />,
-  // });
-
   const table = useMaterialReactTable({
     columns,
     data: therapists,
@@ -214,7 +173,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
       showGlobalFilter: true,
       showColumnFilters: true,
       pagination: {
-        pageSize: 50,
+        pageSize: 10,
         pageIndex: 0,
       },
       columnVisibility: {
@@ -235,7 +194,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
     muiTableContainerProps: {
       className: "table-container",
     },
-    renderDetailPanel: ({ row }) => <DetailPanel row={row} />,
+    renderDetailPanel: ({ row }) => <CardDetailPanel row={row} />,
   });
 
   return (
