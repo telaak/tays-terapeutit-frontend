@@ -12,7 +12,11 @@ export function PuhelinCell({ row }: { row: MRT_Row<Terapeutti> }) {
   return (
     <Stack spacing={2}>
       {parsedNumbers.map((parsedNumber) => {
-        return <a href={`tel:${parsedNumber}`}>{parsedNumber}</a>;
+        return (
+          <a key={parsedNumber} href={`tel:${parsedNumber}`}>
+            {parsedNumber}
+          </a>
+        );
       })}
     </Stack>
   );

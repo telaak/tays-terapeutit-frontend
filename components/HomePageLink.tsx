@@ -8,6 +8,7 @@ export function HomePageLink({ url = "" }: { url: string }) {
         const trimmedPage = page.trim();
         return (
           <a
+            key={trimmedPage}
             target="_blank"
             href={
               trimmedPage.startsWith("http") || trimmedPage.startsWith("https")
