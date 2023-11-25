@@ -65,3 +65,8 @@ export function splitEmails(terapeutti: Terapeutti) {
   const parsedEmails = emails.map((email) => parseEmail(terapeutti, email));
   return parsedEmails;
 }
+
+export function splitHomepages(homepageString: string) {
+  const homePages = homepageString.trim().split(",").map(p => p.trim())
+  return homePages
+}

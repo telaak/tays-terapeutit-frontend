@@ -8,15 +8,25 @@ export function TextDetail({
   content: string;
 }) {
   return (
-    <Box>
+    <Box
+      sx={{
+        width: "100%",
+      }}
+    >
       <Stack
         sx={{
           gap: 1,
         }}
       >
-        <Divider orientation="horizontal" flexItem />
-        <Typography variant="h6">{title}</Typography>
-        <Typography variant="body2">{content}</Typography>
+        <Typography variant="h5">{title}</Typography>
+        <Typography
+          sx={{
+            wordBreak: "break-word",
+          }}
+          variant="body2"
+        >
+          {content}
+        </Typography>
       </Stack>
     </Box>
   );

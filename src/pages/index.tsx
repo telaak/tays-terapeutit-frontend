@@ -20,6 +20,7 @@ import { CardDetailPanel } from "../components/CardDetailPanel";
 import { HomePageLink } from "../components/HomePageLink";
 import { SähköpostiCell } from "../components/SähköpostiCell";
 import { PuhelinCell } from "../components/PuhelinCell";
+import { HomepageCell } from "@/components/HomepageCell";
 
 export const apiUrl = `${process.env.BACKEND_URL}`;
 
@@ -62,7 +63,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
       },
       {
         accessorKey: "Paikkakunta",
-        header: "Paikka",
+        header: "Paikkakunta",
         size: 100,
         filterVariant: "autocomplete",
       },
@@ -143,7 +144,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         header: "Kotisivut",
         size: 120,
         accessorFn: (row) => (row.Kotisivut ? true : false),
-        Cell: ({ row }) => <HomePageLink url={row.original.Kotisivut} />,
+        Cell: ({ row }) => <HomepageCell url={row.original.Kotisivut} />,
         filterVariant: "checkbox",
         muiTableBodyCellProps: {
           sx: {
@@ -182,11 +183,11 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
       showGlobalFilter: true,
       showColumnFilters: true,
       columnVisibility: {
-        Vastaanotot: true,
+        Vastaanotot: false,
         Ajanvaraus: false,
         Kela: false,
         Kohderyhmä: false,
-        Paikkakunta: false,
+        Paikkakunta: true,
         Kelalisätiedot: true,
         Kieli: false,
         Kotisivut: false,
@@ -201,7 +202,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
     },
     state: { pagination },
     onPaginationChange: setPagination,
-    renderDetailPanel: ({ row }) => <CardDetailPanel row={row} />,
+    // renderDetailPanel: ({ row }) => <CardDetailPanel row={row} />,
   });
 
   return (
