@@ -47,7 +47,7 @@ export async function getStaticProps({ params }: { params: any }) {
   );
   return {
     props: {
-      terapeutti: foundTerapeutti,
+      terapeutti: foundTerapeutti || null,
     },
   };
 }
