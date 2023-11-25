@@ -1,11 +1,8 @@
 import { Terapeutti } from "@/types";
 import { Stack } from "@mui/material";
-import { MRT_Row } from "material-react-table";
 
-export function PuhelinCell({ row }: { row: MRT_Row<Terapeutti> }) {
-  const phoneNumbers = row.original.Puhelin
-    ? row.original.Puhelin.split(",")
-    : [];
+export function PuhelinCell({ terapeutti }: { terapeutti: Terapeutti }) {
+  const phoneNumbers = terapeutti.Puhelin ? terapeutti.Puhelin.split(",") : [];
   const parsedNumbers = phoneNumbers.map((phoneNumber) => {
     return phoneNumber.replace(/\D/g, "");
   });

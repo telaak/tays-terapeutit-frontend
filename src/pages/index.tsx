@@ -121,7 +121,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         header: "Sähköposti",
         size: 155,
         accessorFn: (row) => (row.Sähköposti ? true : false),
-        Cell: ({ row }) => <SähköpostiCell row={row} />,
+        Cell: ({ row }) => <SähköpostiCell terapeutti={row.original} />,
         filterVariant: "checkbox",
         muiTableBodyCellProps: {
           sx: {
@@ -135,7 +135,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         header: "Puhelin",
         size: 100,
         accessorFn: (row) => (row.Puhelin ? true : false),
-        Cell: ({ row }) => <PuhelinCell row={row} />,
+        Cell: ({ row }) => <PuhelinCell terapeutti={row.original} />,
         filterVariant: "checkbox",
       },
       {
