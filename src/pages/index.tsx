@@ -13,7 +13,16 @@ import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
 import { MRT_Localization_FI } from "@/fi-i18";
 import { Terapeutti } from "@/types";
-import { Stack, AppBar, Toolbar, Paper, Box } from "@mui/material";
+import {
+  Stack,
+  AppBar,
+  Toolbar,
+  Paper,
+  Box,
+  Button,
+  IconButton,
+  Grid,
+} from "@mui/material";
 import { CopyEmailsButton } from "../components/CopyEmailsButton";
 import { SendEmailsButton } from "../components/SendEmailsButton";
 import { CardDetailPanel } from "../components/CardDetailPanel";
@@ -21,6 +30,7 @@ import { HomePageLink } from "../components/HomePageLink";
 import { SähköpostiCell } from "../components/SähköpostiCell";
 import { PuhelinCell } from "../components/PuhelinCell";
 import { HomepageCell } from "@/components/HomepageCell";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 export const apiUrl = `${process.env.BACKEND_URL}`;
 
@@ -49,6 +59,23 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         id: "kokoNimi",
         size: 80,
         filterVariant: "autocomplete",
+        Cell: ({ row }) => (
+          <Grid sx={{
+            justifyContent: "center",
+            alignItems: "center"
+          }} container>
+            <Grid item xs={10}>
+              {`${row.original.Etunimi} ${row.original.Sukunimi}`}
+            </Grid>
+            <Grid item xs={2}>
+              <IconButton onClick={() => {
+                window.open(`/${row.original.Etunimi} ${row.original.Sukunimi}`)
+              }}>
+                <OpenInNewIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
+        ),
       },
       {
         accessorKey: "Suuntaus",

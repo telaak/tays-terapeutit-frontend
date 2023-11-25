@@ -3,6 +3,7 @@ import { getTherapists } from "..";
 import { Terapeutti } from "@/types";
 import {
   Box,
+  Button,
   Chip,
   Container,
   Divider,
@@ -14,6 +15,7 @@ import {
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import HomeIcon from "@mui/icons-material/Home";
 import {
   parseEmail,
@@ -180,6 +182,11 @@ export default function TerapeuttiPage({
                         label={<HomePageLink url={kotisivu} />}
                       />
                     ))}
+                  <MultiLineChip
+                    icon={<LocalHospitalIcon />}
+                    key={terapeutti.href}
+                    label={<HomePageLink url={terapeutti.href!} />}
+                  />
                 </Stack>
               </Stack>
             </Box>
