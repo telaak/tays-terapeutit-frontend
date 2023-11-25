@@ -19,6 +19,7 @@ import { HomePageLink } from "@/components/HomePageLink";
 import { PuhelinCell } from "@/components/PuhelinCell";
 import { SähköpostiCell } from "@/components/SähköpostiCell";
 import Head from "next/head";
+import { TextDetail } from "@/components/TextDetail";
 
 export const getStaticPaths = async () => {
   const therapists = await getTherapists();
@@ -65,28 +66,31 @@ export default function TerapeuttiPage({
             }}
           >
             <Stack spacing={2}>
-              <Divider>
-                <Typography variant="h5">
-                  {terapeutti.Etunimi} {terapeutti.Sukunimi}
-                </Typography>
-              </Divider>
+              <Typography textAlign="center" variant="h5">
+                {terapeutti.Etunimi} {terapeutti.Sukunimi}
+              </Typography>
               <Stack
                 sx={{
                   gap: 1,
                 }}
                 flexWrap="wrap"
-                direction="row"
+                direction="column"
               >
-                <Chip label={terapeutti.Suuntaus} />
-                <Chip label={terapeutti.Kohderyhmä} />
-                {terapeutti.Kela.split(/[,]| ja |sekä/gm).map((kela) => (
-                  <Chip key={kela} label={kela} />
-                ))}
+                {terapeutti.Suuntaus && (
+                  <TextDetail title="Suuntaus" content={terapeutti.Suuntaus} />
+                )}
+                {terapeutti.Kohderyhmä && (
+                  <TextDetail
+                    title="Kohderyhmä"
+                    content={terapeutti.Kohderyhmä}
+                  />
+                )}
+
+                {terapeutti.Kela && (
+                  <TextDetail title="Kela" content={terapeutti.Kela} />
+                )}
               </Stack>
               <Stack spacing={1}>
-                <Divider>
-                  <Typography variant="h5">Ajanvaraus</Typography>
-                </Divider>
                 <Stack
                   flexWrap="wrap"
                   direction="row"
@@ -124,24 +128,21 @@ export default function TerapeuttiPage({
               </Stack>
               <Divider />
               <Stack
-                direction="row"
+                direction="column"
                 sx={{
-                  gap: 1,
+                  gap: 3,
                 }}
                 flexWrap="wrap"
               >
-                <Box>
-                  <Typography variant="h5">Lisätiedot</Typography>
-                  {terapeutti.Lisätiedot}
-                </Box>
-                <Box>
-                  <Typography variant="h5">Kela lisätiedot</Typography>
-                  {terapeutti.Kelalisätiedot}
-                </Box>
-                <Box>
-                  <Typography variant="h5">Koulutus</Typography>
-                  {terapeutti.Koulutus}
-                </Box>
+                <TextDetail
+                  title="Lisätiedot"
+                  content={terapeutti.Lisätiedot}
+                />
+                <TextDetail
+                  title="Kela lisätiedot"
+                  content={terapeutti.Kelalisätiedot}
+                />
+                <TextDetail title="Koulutus" content={terapeutti.Koulutus} />
               </Stack>
             </Stack>
           </Box>

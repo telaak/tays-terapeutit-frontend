@@ -51,3 +51,17 @@ export function isSelected(table: MRT_TableInstance<Terapeutti>) {
   }
   return false;
 }
+
+export function splitPhoneNumbers(phoneNumberString: string) {
+  const phoneNumbers = phoneNumberString ? phoneNumberString.split(",") : [];
+  const parsedNumbers = phoneNumbers.map((phoneNumber) => {
+    return phoneNumber.replace(/\D/g, "");
+  });
+  return parsedNumbers;
+}
+
+export function splitEmails(terapeutti: Terapeutti) {
+  const emails = terapeutti.Sähköposti.split(",");
+  const parsedEmails = emails.map((email) => parseEmail(terapeutti, email));
+  return parsedEmails;
+}

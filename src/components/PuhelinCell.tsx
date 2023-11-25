@@ -1,11 +1,9 @@
+import { splitPhoneNumbers } from "@/helperFunctions";
 import { Terapeutti } from "@/types";
 import { Stack } from "@mui/material";
 
 export function PuhelinCell({ terapeutti }: { terapeutti: Terapeutti }) {
-  const phoneNumbers = terapeutti.Puhelin ? terapeutti.Puhelin.split(",") : [];
-  const parsedNumbers = phoneNumbers.map((phoneNumber) => {
-    return phoneNumber.replace(/\D/g, "");
-  });
+  const parsedNumbers = splitPhoneNumbers(terapeutti.Puhelin);
   return (
     <Stack spacing={2}>
       {parsedNumbers.map((parsedNumber) => {
