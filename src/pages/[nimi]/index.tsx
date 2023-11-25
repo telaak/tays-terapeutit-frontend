@@ -27,6 +27,7 @@ import { SähköpostiCell } from "@/components/SähköpostiCell";
 import Head from "next/head";
 import { TextDetail } from "@/components/TextDetail";
 import { MultiLineChip } from "@/components/MultiLineChip";
+import Error from "next/error";
 
 export const getStaticPaths = async () => {
   const therapists = await getTherapists();
@@ -52,137 +53,140 @@ export async function getStaticProps({ params }: { params: any }) {
 export default function TerapeuttiPage({
   terapeutti,
 }: {
-  terapeutti: Terapeutti;
+  terapeutti: Terapeutti | undefined;
 }) {
-  return (
-    <>
-      <Head>
-        <title>{`${terapeutti.Etunimi} ${terapeutti.Sukunimi}`}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <Container
-        maxWidth="lg"
-        sx={{
-          padding: 2,
-        }}
-      >
-        <Paper elevation={5}>
-          <Box
-            sx={{
-              padding: 2,
-            }}
-          >
-            <Stack
+  if (terapeutti) {
+    return (
+      <>
+        <Head>
+          <title>{`${terapeutti.Etunimi} ${terapeutti.Sukunimi}`}</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Head>
+        <Container
+          maxWidth="lg"
+          sx={{
+            padding: 2,
+          }}
+        >
+          <Paper elevation={5}>
+            <Box
               sx={{
-                gap: 1,
+                padding: 2,
               }}
-              flexWrap="wrap"
-              direction="column"
-              divider={<Divider orientation="horizontal" flexItem />}
             >
-              <Typography textAlign="center" variant="h5">
-                {terapeutti.Etunimi} {terapeutti.Sukunimi}
-              </Typography>
-              {terapeutti.Kieli && (
-                <TextDetail title="Kieli" content={terapeutti.Kieli} />
-              )}
-              {terapeutti.Suuntaus && (
-                <TextDetail title="Suuntaus" content={terapeutti.Suuntaus} />
-              )}
-              {terapeutti.Kohderyhmä && (
-                <TextDetail
-                  title="Kohderyhmä"
-                  content={terapeutti.Kohderyhmä}
-                />
-              )}
-
-              {terapeutti.Kela && (
-                <TextDetail title="Kela" content={terapeutti.Kela} />
-              )}
-
-              {terapeutti.Lisätiedot && (
-                <TextDetail
-                  title="Lisätiedot"
-                  content={terapeutti.Lisätiedot}
-                />
-              )}
-              {terapeutti.Kelalisätiedot && (
-                <TextDetail
-                  title="Kela lisätiedot"
-                  content={terapeutti.Kelalisätiedot}
-                />
-              )}
-              {terapeutti.Koulutus && (
-                <TextDetail title="Koulutus" content={terapeutti.Koulutus} />
-              )}
-              {terapeutti.Tilaa && (
-                <TextDetail title="Tilaa" content={terapeutti.Tilaa} />
-              )}
-              {terapeutti.Ajanvaraus && (
-                <TextDetail
-                  title="Ajanvaraus"
-                  content={terapeutti.Ajanvaraus}
-                />
-              )}
-              {terapeutti.Vastaanotot && (
-                <>
-                  <Typography variant="h5">Vastaanotot</Typography>
-                  <Grid spacing={3} direction="row" flexWrap="wrap" container>
-                    {terapeutti.Vastaanotot.map((vastaanotto) => (
-                      <Grid
-                        key={vastaanotto}
-                        xs={12 / terapeutti.Vastaanotot.length}
-                        item
-                      >
-                        {vastaanotto.trim()}
-                      </Grid>
-                    ))}
-                  </Grid>
-                </>
-              )}
               <Stack
                 sx={{
                   gap: 1,
                 }}
-                direction="row"
                 flexWrap="wrap"
+                direction="column"
+                divider={<Divider orientation="horizontal" flexItem />}
               >
-                {terapeutti.Sähköposti &&
-                  splitEmails(terapeutti).map((email) => {
-                    const parsedEmail = parseEmail(terapeutti, email);
-                    return (
+                <Typography textAlign="center" variant="h5">
+                  {terapeutti.Etunimi} {terapeutti.Sukunimi}
+                </Typography>
+                {terapeutti.Kieli && (
+                  <TextDetail title="Kieli" content={terapeutti.Kieli} />
+                )}
+                {terapeutti.Suuntaus && (
+                  <TextDetail title="Suuntaus" content={terapeutti.Suuntaus} />
+                )}
+                {terapeutti.Kohderyhmä && (
+                  <TextDetail
+                    title="Kohderyhmä"
+                    content={terapeutti.Kohderyhmä}
+                  />
+                )}
+
+                {terapeutti.Kela && (
+                  <TextDetail title="Kela" content={terapeutti.Kela} />
+                )}
+
+                {terapeutti.Lisätiedot && (
+                  <TextDetail
+                    title="Lisätiedot"
+                    content={terapeutti.Lisätiedot}
+                  />
+                )}
+                {terapeutti.Kelalisätiedot && (
+                  <TextDetail
+                    title="Kela lisätiedot"
+                    content={terapeutti.Kelalisätiedot}
+                  />
+                )}
+                {terapeutti.Koulutus && (
+                  <TextDetail title="Koulutus" content={terapeutti.Koulutus} />
+                )}
+                {terapeutti.Tilaa && (
+                  <TextDetail title="Tilaa" content={terapeutti.Tilaa} />
+                )}
+                {terapeutti.Ajanvaraus && (
+                  <TextDetail
+                    title="Ajanvaraus"
+                    content={terapeutti.Ajanvaraus}
+                  />
+                )}
+                {terapeutti.Vastaanotot && (
+                  <>
+                    <Typography variant="h5">Vastaanotot</Typography>
+                    <Grid spacing={3} direction="row" flexWrap="wrap" container>
+                      {terapeutti.Vastaanotot.map((vastaanotto) => (
+                        <Grid
+                          key={vastaanotto}
+                          xs={12 / terapeutti.Vastaanotot.length}
+                          item
+                        >
+                          {vastaanotto.trim()}
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </>
+                )}
+                <Stack
+                  sx={{
+                    gap: 1,
+                  }}
+                  direction="row"
+                  flexWrap="wrap"
+                >
+                  {terapeutti.Sähköposti &&
+                    splitEmails(terapeutti).map((email) => {
+                      const parsedEmail = parseEmail(terapeutti, email);
+                      return (
+                        <MultiLineChip
+                          key={email}
+                          icon={<EmailIcon />}
+                          label={
+                            <a href={`mailto:${parsedEmail}`}>{parsedEmail}</a>
+                          }
+                        />
+                      );
+                    })}
+                  {terapeutti.Puhelin &&
+                    splitPhoneNumbers(terapeutti.Puhelin).map((nro) => {
+                      return (
+                        <MultiLineChip
+                          key={nro}
+                          icon={<PhoneIcon />}
+                          label={<a href={`tel:${nro}`}>{nro}</a>}
+                        />
+                      );
+                    })}
+                  {terapeutti.Kotisivut &&
+                    splitHomepages(terapeutti.Kotisivut).map((kotisivu) => (
                       <MultiLineChip
-                        key={email}
-                        icon={<EmailIcon />}
-                        label={
-                          <a href={`mailto:${parsedEmail}`}>{parsedEmail}</a>
-                        }
+                        icon={<HomeIcon />}
+                        key={kotisivu}
+                        label={<HomePageLink url={kotisivu} />}
                       />
-                    );
-                  })}
-                {terapeutti.Puhelin &&
-                  splitPhoneNumbers(terapeutti.Puhelin).map((nro) => {
-                    return (
-                      <MultiLineChip
-                        key={nro}
-                        icon={<PhoneIcon />}
-                        label={<a href={`tel:${nro}`}>{nro}</a>}
-                      />
-                    );
-                  })}
-                {terapeutti.Kotisivut &&
-                  splitHomepages(terapeutti.Kotisivut).map((kotisivu) => (
-                    <MultiLineChip
-                      icon={<HomeIcon />}
-                      key={kotisivu}
-                      label={<HomePageLink url={kotisivu} />}
-                    />
-                  ))}
+                    ))}
+                </Stack>
               </Stack>
-            </Stack>
-          </Box>
-        </Paper>
-      </Container>
-    </>
-  );
+            </Box>
+          </Paper>
+        </Container>
+      </>
+    );
+  }
+  return <Error statusCode={404} />;
 }

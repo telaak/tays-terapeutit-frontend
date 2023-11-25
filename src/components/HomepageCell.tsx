@@ -7,7 +7,7 @@ export function HomepageCell({ url = "" }: { url: string }) {
   return (
     <Stack spacing={2}>
       {homePages.map((page) => (
-        <HomePageLink url={page} />
+        <HomePageLink key={page} url={page} />
       ))}
     </Stack>
   );
