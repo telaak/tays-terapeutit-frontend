@@ -54,9 +54,9 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
     () => [
       {
         accessorFn: (terapeutti) =>
-          `${terapeutti.Etunimi} ${terapeutti.Sukunimi}`,
+          `${terapeutti.Sukunimi} ${terapeutti.Etunimi} `,
         header: "Nimi",
-        id: "kokoNimi",
+        id: "Nimi",
         size: 80,
         filterVariant: "autocomplete",
         Cell: ({ row }) => (
@@ -68,13 +68,13 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
             container
           >
             <Grid item xs={10}>
-              {`${row.original.Etunimi} ${row.original.Sukunimi}`}
+              {`${row.original.Sukunimi} ${row.original.Etunimi} `}
             </Grid>
             <Grid item xs={2}>
               <IconButton
                 onClick={() => {
                   window.open(
-                    `/${row.original.Etunimi} ${row.original.Sukunimi}`
+                    `/${row.original.Sukunimi.toLowerCase()}-${row.original.Etunimi.toLowerCase()}`
                   );
                 }}
               >

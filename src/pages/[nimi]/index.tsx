@@ -29,7 +29,9 @@ import Error from "next/error";
 export const getStaticPaths = async () => {
   const therapists = await getTherapists();
   return {
-    paths: therapists.map((t) => `/${t.Etunimi} ${t.Sukunimi}`),
+    paths: therapists.map(
+      (t) => `/${t.Sukunimi.toLowerCase()}-${t.Etunimi.toLowerCase()}`
+    ),
     fallback: true,
   };
 };
@@ -38,7 +40,8 @@ export async function getStaticProps({ params }: { params: any }) {
   const { nimi }: { nimi: string } = params;
   const therapists = await getTherapists();
   const foundTerapeutti = therapists.find(
-    (t: Terapeutti) => `${t.Etunimi} ${t.Sukunimi}` === nimi
+    (t: Terapeutti) =>
+      `${t.Sukunimi.toLowerCase()}-${t.Etunimi.toLowerCase()}` === nimi
   );
   return {
     props: {
@@ -56,7 +59,7 @@ export default function TerapeuttiPage({
     return (
       <>
         <Head>
-          <title>{`${terapeutti.Etunimi} ${terapeutti.Sukunimi}`}</title>
+          <title>{`${terapeutti.Sukunimi} ${terapeutti.Etunimi}`}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
         <Container
@@ -80,7 +83,7 @@ export default function TerapeuttiPage({
                 divider={<Divider orientation="horizontal" flexItem />}
               >
                 <Typography textAlign="center" variant="h5">
-                  {terapeutti.Etunimi} {terapeutti.Sukunimi}
+                  {terapeutti.Sukunimi} {terapeutti.Etunimi}
                 </Typography>
                 {terapeutti.Kieli && (
                   <TextDetail title="Kieli" content={terapeutti.Kieli} />
