@@ -30,7 +30,7 @@ export function DetailPanel({ row }: { row: MRT_Row<Terapeutti> }) {
       <Grid item xs={6}>
         <ExtraInfoAccordion
           title="Kotisivut"
-          content={row.original.Kotisivut}
+          content={row.original.Kotisivut.join(", ")}
         />
       </Grid>
       <Grid item xs={6}>

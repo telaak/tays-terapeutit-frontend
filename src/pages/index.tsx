@@ -171,7 +171,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         header: "Kotisivut",
         size: 120,
         accessorFn: (row) => (row.Kotisivut ? true : false),
-        Cell: ({ row }) => <HomepageCell url={row.original.Kotisivut} />,
+        Cell: ({ row }) => <HomepageCell terapeutti={row.original} />,
         filterVariant: "checkbox",
         muiTableBodyCellProps: {
           sx: {

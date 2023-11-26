@@ -1,12 +1,11 @@
-import { splitHomepages } from "@/helperFunctions";
 import { Stack } from "@mui/material";
 import { HomePageLink } from "./HomePageLink";
+import { Terapeutti } from "@/types";
 
-export function HomepageCell({ url = "" }: { url: string }) {
-  const homePages = splitHomepages(url);
+export function HomepageCell({ terapeutti }: { terapeutti: Terapeutti }) {
   return (
     <Stack spacing={2}>
-      {homePages.map((page) => (
+      {terapeutti.Kotisivut.map((page) => (
         <HomePageLink key={page} url={page} />
       ))}
     </Stack>
