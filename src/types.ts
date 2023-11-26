@@ -4,17 +4,19 @@ export type Terapeutti = {
   Tilaa: string;
   Paikkakunta: string;
   Kohderyhmä: string;
+  Pätevyys: string[];
+  Ammattinimike: string;
   Vastaanotot: string[];
   Ajanvaraus: string;
   Kela: string;
   Kelalisätiedot: string;
   Kieli: string;
-  Kotisivut: string;
+  Kotisivut: string[];
   Koulutus: string;
   Lisätiedot: string;
-  Puhelin: string;
+  Puhelin: string[];
   Suuntaus: string;
-  Sähköposti: string;
+  Sähköposti: string[];
 
   href?: string;
 };

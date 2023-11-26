@@ -17,12 +17,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import HomeIcon from "@mui/icons-material/Home";
-import {
-  parseEmail,
-  splitEmails,
-  splitHomepages,
-  splitPhoneNumbers,
-} from "@/helperFunctions";
+import { parseEmail, parseEmails } from "@/helperFunctions";
 import { HomePageLink } from "@/components/HomePageLink";
 import { PuhelinCell } from "@/components/PuhelinCell";
 import { SähköpostiCell } from "@/components/SähköpostiCell";
@@ -152,7 +147,7 @@ export default function TerapeuttiPage({
                   flexWrap="wrap"
                 >
                   {terapeutti.Sähköposti &&
-                    splitEmails(terapeutti).map((email) => {
+                    terapeutti.Sähköposti.map((email) => {
                       const parsedEmail = parseEmail(terapeutti, email);
                       return (
                         <MultiLineChip
@@ -165,7 +160,7 @@ export default function TerapeuttiPage({
                       );
                     })}
                   {terapeutti.Puhelin &&
-                    splitPhoneNumbers(terapeutti.Puhelin).map((nro) => {
+                    terapeutti.Puhelin.map((nro) => {
                       return (
                         <MultiLineChip
                           key={nro}
@@ -175,7 +170,7 @@ export default function TerapeuttiPage({
                       );
                     })}
                   {terapeutti.Kotisivut &&
-                    splitHomepages(terapeutti.Kotisivut).map((kotisivu) => (
+                    terapeutti.Kotisivut.map((kotisivu) => (
                       <MultiLineChip
                         icon={<HomeIcon />}
                         key={kotisivu}

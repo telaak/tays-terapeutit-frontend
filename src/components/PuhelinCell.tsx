@@ -1,15 +1,14 @@
-import { splitPhoneNumbers } from "@/helperFunctions";
+import { trimPhoneNumber } from "@/helperFunctions";
 import { Terapeutti } from "@/types";
 import { Stack } from "@mui/material";
 
 export function PuhelinCell({ terapeutti }: { terapeutti: Terapeutti }) {
-  const parsedNumbers = splitPhoneNumbers(terapeutti.Puhelin);
   return (
     <Stack spacing={2}>
-      {parsedNumbers.map((parsedNumber) => {
+      {terapeutti.Puhelin.map((phoneNumber) => {
         return (
-          <a key={parsedNumber} href={`tel:${parsedNumber}`}>
-            {parsedNumber}
+          <a key={phoneNumber} href={`tel:${trimPhoneNumber(phoneNumber)}`}>
+            {phoneNumber}
           </a>
         );
       })}
