@@ -109,7 +109,7 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
       },
       {
         accessorKey: "Kohderyhmä",
-        header: "Kohde",
+        header: "Kohderyhmä",
         size: 100,
         filterVariant: "autocomplete",
       },

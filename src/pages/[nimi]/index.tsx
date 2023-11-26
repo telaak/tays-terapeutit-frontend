@@ -2,14 +2,17 @@ import { useRouter } from "next/router";
 import { getTherapists } from "..";
 import { Terapeutti } from "@/types";
 import {
+  AppBar,
   Box,
   Button,
   Chip,
   Container,
   Divider,
   Grid,
+  IconButton,
   Paper,
   Stack,
+  Toolbar,
   Typography,
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
@@ -17,7 +20,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import HomeIcon from "@mui/icons-material/Home";
-import { parseEmail, parseEmails } from "@/helperFunctions";
+import { parseEmail, parseEmails, trimPhoneNumber } from "@/helperFunctions";
 import { HomePageLink } from "@/components/HomePageLink";
 import { PuhelinCell } from "@/components/PuhelinCell";
 import { SähköpostiCell } from "@/components/SähköpostiCell";
@@ -25,6 +28,10 @@ import Head from "next/head";
 import { TextDetail } from "@/components/TextDetail";
 import { MultiLineChip } from "@/components/MultiLineChip";
 import Error from "next/error";
+import PrintIcon from "@mui/icons-material/Print";
+import CloseIcon from "@mui/icons-material/Close";
+import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export const getStaticPaths = async () => {
   const therapists = await getTherapists();
@@ -62,13 +69,31 @@ export default function TerapeuttiPage({
           <title>{`${terapeutti.Sukunimi} ${terapeutti.Etunimi}`}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
-        <Container
-          maxWidth="lg"
-          sx={{
-            padding: 2,
-          }}
-        >
-          <Paper elevation={5}>
+        <Container maxWidth="md" disableGutters>
+          <AppBar
+            sx={{
+              displayPrint: "none",
+            }}
+            position="static"
+          >
+            <Toolbar>
+              <Typography
+                sx={{
+                  flexGrow: 1,
+                }}
+                variant="h4"
+              >
+                {terapeutti.Sukunimi} {terapeutti.Etunimi}
+              </Typography>
+              <IconButton onClick={() => window.print()} color="inherit">
+                <PrintIcon />
+              </IconButton>
+              <IconButton onClick={() => window.close()} color="inherit">
+                <CloseIcon />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Paper elevation={3}>
             <Box
               sx={{
                 padding: 2,
@@ -82,12 +107,31 @@ export default function TerapeuttiPage({
                 direction="column"
                 divider={<Divider orientation="horizontal" flexItem />}
               >
-                <Typography textAlign="center" variant="h5">
+                <Typography
+                  sx={{
+                    displayPrint: "block",
+                    display: "none",
+                  }}
+                  variant="h4"
+                >
                   {terapeutti.Sukunimi} {terapeutti.Etunimi}
                 </Typography>
-                {terapeutti.Kieli && (
-                  <TextDetail title="Kieli" content={terapeutti.Kieli} />
+                {terapeutti.Ammattinimike &&
+                  terapeutti.Ammattinimike.trim() && (
+                    <TextDetail
+                      title="Ammattinimike"
+                      content={terapeutti.Ammattinimike}
+                    />
+                  )}
+                {terapeutti.Pätevyys.length && (
+                  <TextDetail
+                    title="Pätevyys"
+                    content={terapeutti.Pätevyys.join(", ")}
+                  />
                 )}
+                {/* {terapeutti.Kieli && (
+                  <TextDetail title="Kieli" content={terapeutti.Kieli} />
+                )} */}
                 {terapeutti.Suuntaus && (
                   <TextDetail title="Suuntaus" content={terapeutti.Suuntaus} />
                 )}
@@ -168,7 +212,9 @@ export default function TerapeuttiPage({
                         <MultiLineChip
                           key={nro}
                           icon={<PhoneIcon />}
-                          label={<a href={`tel:${nro}`}>{nro}</a>}
+                          label={
+                            <a href={`tel:${trimPhoneNumber(nro)}`}>{nro}</a>
+                          }
                         />
                       );
                     })}
