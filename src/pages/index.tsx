@@ -60,17 +60,24 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         size: 80,
         filterVariant: "autocomplete",
         Cell: ({ row }) => (
-          <Grid sx={{
-            justifyContent: "center",
-            alignItems: "center"
-          }} container>
+          <Grid
+            sx={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            container
+          >
             <Grid item xs={10}>
               {`${row.original.Etunimi} ${row.original.Sukunimi}`}
             </Grid>
             <Grid item xs={2}>
-              <IconButton onClick={() => {
-                window.open(`/${row.original.Etunimi} ${row.original.Sukunimi}`)
-              }}>
+              <IconButton
+                onClick={() => {
+                  window.open(
+                    `/${row.original.Etunimi} ${row.original.Sukunimi}`
+                  );
+                }}
+              >
                 <OpenInNewIcon />
               </IconButton>
             </Grid>
@@ -80,6 +87,12 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
       {
         accessorKey: "Suuntaus",
         header: "Suuntaus",
+        size: 120,
+      },
+      {
+        id: "Pätevyys",
+        accessorFn: (row) => row.Pätevyys.join(", "),
+        header: "Pätevyys",
         size: 120,
       },
       {
@@ -101,14 +114,14 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         filterVariant: "autocomplete",
       },
       {
-        accessorFn: (row) => row.Vastaanotot.map((s) => s.trim()).join(", "),
+        accessorFn: (row) => row.Vastaanotot.join(", "),
         id: "Vastaanotot",
         header: "Vastaanotot",
         size: 150,
         Cell: ({ row }) => (
           <Stack spacing={2}>
             {row.original.Vastaanotot.map((vastaanotto) => (
-              <span key={vastaanotto}>{vastaanotto.trim()}</span>
+              <span key={vastaanotto}>{vastaanotto}</span>
             ))}
           </Stack>
         ),
@@ -116,6 +129,11 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
       {
         accessorKey: "Kela",
         header: "Kela",
+        size: 150,
+      },
+      {
+        accessorKey: "Ammattinimike",
+        header: "Ammattinimike",
         size: 150,
       },
       {
@@ -210,6 +228,8 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
       showGlobalFilter: true,
       showColumnFilters: true,
       columnVisibility: {
+        Pätevyys: false,
+        Ammattinimike: false,
         Vastaanotot: false,
         Ajanvaraus: false,
         Kela: false,
