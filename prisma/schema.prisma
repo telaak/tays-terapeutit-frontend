@@ -33,6 +33,7 @@ model Therapist {
   extraInfo      String[]
   phoneNumber    String?
   email          String?
+  homePage       String?
   languages      String[]
   targetGroups   String[]
   additionalInfo String[]
