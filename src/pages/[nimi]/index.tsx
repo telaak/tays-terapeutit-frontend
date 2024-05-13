@@ -1,6 +1,10 @@
+import { useRouter } from "next/router";
+import { Terapeutti } from "@/types";
 import {
   AppBar,
   Box,
+  Button,
+  Chip,
   Container,
   Divider,
   Grid,
@@ -12,8 +16,10 @@ import {
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
-import { parseEmail, trimPhoneNumber } from "@/helperFunctions";
+import HomeIcon from "@mui/icons-material/Home";
+import { parseEmail, parseEmails, trimPhoneNumber } from "@/helperFunctions";
 import { HomePageLink } from "@/components/HomePageLink";
 import Head from "next/head";
 import { TextDetail } from "@/components/TextDetail";
@@ -23,9 +29,12 @@ import PrintIcon from "@mui/icons-material/Print";
 import CloseIcon from "@mui/icons-material/Close";
 import { prisma } from "@/prisma";
 import { Therapist } from "@prisma/client";
+import axios from "axios";
 
 export const getStaticPaths = async () => {
-  const therapists = await prisma.therapist.findMany();
+  const therapists: Therapist[] = (
+    await axios.get(`${process.env.BACKEND_URL}/therapist`)
+  ).data;
   return {
     paths: therapists.map(
       (t) => `/${t.lastName.toLowerCase()}-${t.firstName.toLowerCase()}`
@@ -36,7 +45,9 @@ export const getStaticPaths = async () => {
 
 export async function getStaticProps({ params }: { params: any }) {
   const { nimi }: { nimi: string } = params;
-  const therapists = await prisma.therapist.findMany();
+  const therapists: Therapist[] = (
+    await axios.get(`${process.env.BACKEND_URL}/therapist`)
+  ).data;
   const foundTherapist = therapists.find(
     (t: Therapist) =>
       `${t.lastName.toLowerCase()}-${t.firstName.toLowerCase()}` === nimi
@@ -210,7 +221,9 @@ export default function TherapistPage({
                   <MultiLineChip
                     icon={<LocalHospitalIcon />}
                     key={therapist.href}
-                    label={<HomePageLink url={`https://pirha.fi${therapist.href}`} />}
+                    label={
+                      <HomePageLink url={`https://pirha.fi${therapist.href}`} />
+                    }
                   />
                 </Stack>
               </Stack>

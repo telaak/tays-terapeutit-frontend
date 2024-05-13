@@ -28,9 +28,12 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getTherapists, prisma } from "@/prisma";
 import { Therapist } from "@prisma/client";
 import { HomepageCell } from "@/components/HomepageCell";
+import axios from "axios";
 
 export async function getStaticProps() {
-  const therapists = await getTherapists();
+  const therapists: Therapist[] = (
+    await axios.get(`${process.env.BACKEND_URL}/therapist`)
+  ).data;
 
   return {
     props: {
