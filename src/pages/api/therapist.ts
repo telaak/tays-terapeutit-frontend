@@ -1,6 +1,7 @@
-import { prisma } from "@/prisma";
+import { getTherapists, prisma } from "@/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { Therapist } from '@prisma/client'
+import type { Therapist } from "@prisma/client";
+import { debouncedRevalidate } from "@/cloudflare";
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,7 +9,7 @@ export default async function handler(
 ) {
   switch (req.method) {
     case "GET": {
-      const therapists = await prisma.therapist.findMany();
+      const therapists = await getTherapists();
       return res.json(therapists);
     }
     case "POST": {
@@ -24,9 +25,13 @@ export default async function handler(
             fullName: therapist.fullName,
           },
         });
+        res
+          .revalidate(`/${therapist.lastName}-${therapist.firstName}`)
+          .catch(console.error);
+        // debouncedRevalidate(res).catch(console.error);
         return res.status(201).json(upsert);
       } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(500).send(error);
       }
     }

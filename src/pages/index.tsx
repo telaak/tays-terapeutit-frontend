@@ -25,11 +25,11 @@ import { SendEmailsButton } from "../components/SendEmailsButton";
 import { EmailCell } from "../components/EmailCell";
 import { PhoneCell } from "../components/PuhelinCell";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { prisma } from "@/prisma";
+import { getTherapists, prisma } from "@/prisma";
 import { Therapist } from "@prisma/client";
 
 export async function getStaticProps() {
-  const therapists = await prisma.therapist.findMany();
+  const therapists = await getTherapists();
 
   return {
     props: {
