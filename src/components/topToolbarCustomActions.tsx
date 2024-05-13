@@ -4,11 +4,12 @@ import { Box, Tooltip, Button } from "@mui/material";
 import { MRT_TableInstance } from "material-react-table";
 import { CopyEmailsButton } from "./CopyEmailsButton";
 import { SendEmailsButton } from "./SendEmailsButton";
+import { Therapist } from "@prisma/client";
 
 export function CustomActions({
   table,
 }: {
-  table: MRT_TableInstance<Terapeutti>;
+  table: MRT_TableInstance<Therapist>;
 }) {
   return (
     <Box

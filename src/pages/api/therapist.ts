@@ -1,6 +1,6 @@
 import { prisma } from "@/prisma";
-import { Prisma } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
+import type { Therapist } from '@prisma/client'
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,7 +15,7 @@ export default async function handler(
       if (req.query.postSecret !== global.process.env.POST_SECRET) {
         return res.status(401).json({ message: "Invalid token" });
       }
-      const therapist: Prisma.TherapistCreateInput = req.body;
+      const therapist: Therapist = req.body;
       try {
         const upsert = await prisma.therapist.upsert({
           create: therapist,
