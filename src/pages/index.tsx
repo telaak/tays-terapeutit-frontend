@@ -27,6 +27,7 @@ import { PhoneCell } from "../components/PuhelinCell";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getTherapists, prisma } from "@/prisma";
 import { Therapist } from "@prisma/client";
+import { HomepageCell } from "@/components/HomepageCell";
 
 export async function getStaticProps() {
   const therapists = await getTherapists();
@@ -114,11 +115,6 @@ export default function Table({ therapists }: { therapists: Therapist[] }) {
           </Stack>
         ),
       },
-      // {
-      //   accessorKey: "jobTitle",
-      //   header: "Ammattinimike",
-      //   size: 150,
-      // },
       {
         accessorFn: (row) => row.languages.join(", "),
         accessorKey: "languages",
@@ -161,20 +157,20 @@ export default function Table({ therapists }: { therapists: Therapist[] }) {
         Cell: ({ row }) => <PhoneCell therapist={row.original} />,
         filterVariant: "checkbox",
       },
-      // {
-      //   accessorKey: "Kotisivut",
-      //   header: "Kotisivut",
-      //   size: 120,
-      //   accessorFn: (row) => (row.Kotisivut.length ? true : false),
-      //   Cell: ({ row }) => <HomepageCell terapeutti={row.original} />,
-      //   filterVariant: "checkbox",
-      //   muiTableBodyCellProps: {
-      //     sx: {
-      //       wordBreak: "break-all",
-      //       border: "1px solid rgba(210, 210, 210, 1)",
-      //     },
-      //   },
-      // },
+      {
+        accessorKey: "homePage",
+        header: "Kotisivut",
+        size: 120,
+        accessorFn: (row) => (row.homePage ? true : false),
+        Cell: ({ row }) => <HomepageCell therapist={row.original} />,
+        filterVariant: "checkbox",
+        muiTableBodyCellProps: {
+          sx: {
+            wordBreak: "break-all",
+            border: "1px solid rgba(210, 210, 210, 1)",
+          },
+        },
+      },
     ],
     []
   );
