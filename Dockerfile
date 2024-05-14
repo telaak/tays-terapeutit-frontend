@@ -53,6 +53,8 @@ COPY --from=builder /app/public ./public
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder ./app/.next/static ./.next/static
+COPY --from=builder /app/prisma ./prisma/
+RUN apt update -y && apt install -y openssl
 ENV TZ=Europe/Helsinki
 RUN chown -R 1001:1001 /app
 USER nextjs
