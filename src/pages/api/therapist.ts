@@ -28,7 +28,7 @@ export default async function handler(
         res
           .revalidate(`/${therapist.lastName}-${therapist.firstName}`)
           .catch(console.error);
-        // debouncedRevalidate(res).catch(console.error);
+        debouncedRevalidate(res).catch(console.error);
         return res.status(201).json(upsert);
       } catch (error) {
         console.log(error);
