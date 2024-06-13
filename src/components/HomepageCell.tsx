@@ -1,13 +1,8 @@
 import { Stack } from "@mui/material";
 import { HomePageLink } from "./HomePageLink";
 import { Terapeutti } from "@/types";
+import { Therapist } from "@prisma/client";
 
-export function HomepageCell({ terapeutti }: { terapeutti: Terapeutti }) {
-  return (
-    <Stack spacing={2}>
-      {terapeutti.Kotisivut.map((page) => (
-        <HomePageLink key={page} url={page} />
-      ))}
-    </Stack>
-  );
+export function HomepageCell({ therapist }: { therapist: Therapist }) {
+  return <>{therapist.homePage && <HomePageLink url={therapist.homePage} />}</>;
 }

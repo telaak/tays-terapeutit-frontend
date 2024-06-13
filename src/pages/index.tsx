@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   MRT_ColumnDef,
   MRT_GlobalFilterTextField,
@@ -12,35 +11,29 @@ import {
 import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
 import { MRT_Localization_FI } from "@/fi-i18";
-import { Terapeutti } from "@/types";
 import {
   Stack,
   AppBar,
   Toolbar,
   Paper,
   Box,
-  Button,
   IconButton,
   Grid,
 } from "@mui/material";
 import { CopyEmailsButton } from "../components/CopyEmailsButton";
 import { SendEmailsButton } from "../components/SendEmailsButton";
-import { CardDetailPanel } from "../components/CardDetailPanel";
-import { HomePageLink } from "../components/HomePageLink";
-import { SähköpostiCell } from "../components/SähköpostiCell";
-import { PuhelinCell } from "../components/PuhelinCell";
-import { HomepageCell } from "@/components/HomepageCell";
+import { EmailCell } from "../components/EmailCell";
+import { PhoneCell } from "../components/PuhelinCell";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-
-export const apiUrl = `${process.env.BACKEND_URL}`;
-
-export const getTherapists = async (): Promise<Terapeutti[]> => {
-  const res = await axios.get(`${apiUrl}/therapists`);
-  return res.data;
-};
+import { getTherapists, prisma } from "@/prisma";
+import { Therapist } from "@prisma/client";
+import { HomepageCell } from "@/components/HomepageCell";
+import axios from "axios";
 
 export async function getStaticProps() {
-  const therapists = await getTherapists();
+  const therapists: Therapist[] = (
+    await axios.get(`${process.env.BACKEND_URL}/therapist`)
+  ).data;
 
   return {
     props: {
@@ -49,12 +42,12 @@ export async function getStaticProps() {
   };
 }
 
-export default function Table({ therapists }: { therapists: Terapeutti[] }) {
-  const columns = useMemo<MRT_ColumnDef<Terapeutti>[]>(
+export default function Table({ therapists }: { therapists: Therapist[] }) {
+  const columns = useMemo<MRT_ColumnDef<Therapist>[]>(
     () => [
       {
-        accessorFn: (terapeutti) =>
-          `${terapeutti.Sukunimi} ${terapeutti.Etunimi} `,
+        accessorFn: (therapist) =>
+          `${therapist.lastName} ${therapist.firstName} `,
         header: "Nimi",
         id: "Nimi",
         size: 80,
@@ -68,13 +61,13 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
             container
           >
             <Grid item xs={10}>
-              {`${row.original.Sukunimi} ${row.original.Etunimi} `}
+              {`${row.original.lastName} ${row.original.firstName} `}
             </Grid>
             <Grid item xs={2}>
               <IconButton
                 onClick={() => {
                   window.open(
-                    `/${row.original.Sukunimi.toLowerCase()}-${row.original.Etunimi.toLowerCase()}`
+                    `/${row.original.lastName.toLowerCase()}-${row.original.firstName.toLowerCase()}`
                   );
                 }}
               >
@@ -85,89 +78,72 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         ),
       },
       {
-        accessorKey: "Suuntaus",
-        header: "Suuntaus",
+        id: "education",
+        accessorFn: (row) => row.education.join(", "),
+        header: "Koulutus",
         size: 120,
+        Cell: ({ row }) => (
+          <Stack spacing={2}>
+            {row.original.jobTitle && <Box>{row.original.jobTitle}</Box>}
+            <Box>{row.original.education.join(", ")}</Box>
+          </Stack>
+        ),
       },
       {
-        id: "Pätevyys",
-        accessorFn: (row) => row.Pätevyys.join(", "),
-        header: "Pätevyys",
-        size: 120,
-      },
-      {
-        accessorKey: "Tilaa",
+        accessorKey: "spaceAvailable",
         header: "Tilaa",
         size: 100,
         filterVariant: "autocomplete",
       },
       {
-        accessorKey: "Paikkakunta",
-        header: "Paikkakunta",
-        size: 100,
-        filterVariant: "autocomplete",
-      },
-      {
-        accessorKey: "Kohderyhmä",
+        accessorFn: (row) => row.targetGroups.join(", "),
         header: "Kohderyhmä",
+        accessorKey: "targetGroups",
         size: 100,
         filterVariant: "autocomplete",
       },
       {
-        accessorFn: (row) => row.Vastaanotot.join(", "),
+        accessorFn: (row) => row.reception.join(", "),
         id: "Vastaanotot",
         header: "Vastaanotot",
         size: 150,
         Cell: ({ row }) => (
-          <Stack spacing={2}>
-            {row.original.Vastaanotot.map((vastaanotto) => (
-              <span key={vastaanotto}>{vastaanotto}</span>
+          <Stack>
+            {row.original.reception.map((vastaanotto, index) => (
+              <>
+                {index > 0 && index % 3 === 0 && <br />}
+                <span key={vastaanotto}>{vastaanotto}</span>
+              </>
             ))}
           </Stack>
         ),
       },
       {
-        accessorKey: "Kela",
-        header: "Kela",
-        size: 150,
-      },
-      {
-        accessorKey: "Ammattinimike",
-        header: "Ammattinimike",
-        size: 150,
-      },
-      {
-        accessorKey: "Kelalisätiedot",
-        header: "Kela lisätiedot",
-        size: 150,
-      },
-      {
-        accessorKey: "Kieli",
+        accessorFn: (row) => row.languages.join(", "),
+        accessorKey: "languages",
         header: "Kieli",
         size: 120,
         filterVariant: "autocomplete",
       },
       {
-        accessorKey: "Koulutus",
-        header: "Koulutus",
-        size: 200,
-      },
-      {
-        accessorKey: "Lisätiedot",
+        accessorFn: (row) =>
+          `${row.extraInfo.join(", ")}, ${row.additionalInfo.join(", ")}`,
         header: "Lisätiedot",
-        size: 120,
-      },
-      {
-        accessorKey: "Ajanvaraus",
-        header: "Ajanvaraus",
+        accessorKey: "extras",
         size: 130,
+        Cell: ({ row }) => (
+          <Stack spacing={2}>
+            <Box>{row.original.extraInfo.join(", ")}</Box>
+            <Box>{row.original.additionalInfo.join(", ")}</Box>
+          </Stack>
+        ),
       },
       {
         accessorKey: "Sähköposti",
         header: "Sähköposti",
         size: 155,
-        accessorFn: (row) => (row.Sähköposti.length ? true : false),
-        Cell: ({ row }) => <SähköpostiCell terapeutti={row.original} />,
+        accessorFn: (row) => (row.email && row.email.length ? true : false),
+        Cell: ({ row }) => <EmailCell therapist={row.original} />,
         filterVariant: "checkbox",
         muiTableBodyCellProps: {
           sx: {
@@ -180,16 +156,16 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
         accessorKey: "Puhelin",
         header: "Puhelin",
         size: 100,
-        accessorFn: (row) => (row.Puhelin.length ? true : false),
-        Cell: ({ row }) => <PuhelinCell terapeutti={row.original} />,
+        accessorFn: (row) => (row.phoneNumber ? true : false),
+        Cell: ({ row }) => <PhoneCell therapist={row.original} />,
         filterVariant: "checkbox",
       },
       {
-        accessorKey: "Kotisivut",
+        accessorKey: "homePage",
         header: "Kotisivut",
         size: 120,
-        accessorFn: (row) => (row.Kotisivut.length ? true : false),
-        Cell: ({ row }) => <HomepageCell terapeutti={row.original} />,
+        accessorFn: (row) => (row.homePage ? true : false),
+        Cell: ({ row }) => <HomepageCell therapist={row.original} />,
         filterVariant: "checkbox",
         muiTableBodyCellProps: {
           sx: {
@@ -228,20 +204,9 @@ export default function Table({ therapists }: { therapists: Terapeutti[] }) {
       showGlobalFilter: true,
       showColumnFilters: true,
       columnVisibility: {
-        Pätevyys: false,
-        Ammattinimike: false,
-        Vastaanotot: false,
-        Ajanvaraus: false,
-        Kela: false,
-        Kohderyhmä: false,
-        Paikkakunta: true,
-        Kelalisätiedot: true,
-        Kieli: false,
-        Kotisivut: false,
-        Koulutus: false,
-        Lisätiedot: false,
-        Puhelin: true,
-        Sähköposti: true,
+        jobTitle: false,
+        targetGroups: false,
+        languages: false,
       },
     },
     muiTableContainerProps: {
