@@ -29,15 +29,20 @@ import { getTherapists, prisma } from "@/prisma";
 import { Therapist } from "@prisma/client";
 import { HomepageCell } from "@/components/HomepageCell";
 import axios from "axios";
+import dayjs from "dayjs";
 
 export async function getStaticProps() {
   const therapists: Therapist[] = (
     await axios.get(`${process.env.BACKEND_URL}/therapist`)
   ).data;
 
+  const cutOffDate = dayjs().subtract(7, "days");
+
   return {
     props: {
-      therapists,
+      therapists: therapists.filter((t) =>
+        dayjs(t.updatedAt).isAfter(cutOffDate)
+      ),
     },
   };
 }
