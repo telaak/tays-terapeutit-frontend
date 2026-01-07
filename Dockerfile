@@ -25,10 +25,8 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-ARG BACKEND_URL
-RUN if [  -z ${BACKEND_URL} ];then \
-  export BACKEND_URL=$BACKEND_URL; \
-  fi
+ENV BACKEND_URL=https://tays.terapeuttihaku.fi/api
+
 RUN apt update -y && apt install -y openssl
 RUN npx prisma generate
 RUN yarn build
@@ -40,7 +38,7 @@ RUN yarn build
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
@@ -61,6 +59,6 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
+ENV PORT=3000
 
 CMD ["node", "server.js"]
